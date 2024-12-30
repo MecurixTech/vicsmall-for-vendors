@@ -1,3 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+Your darkest text should be gray-800
+Lighter text should use gray-50 to gray-700 depending on the design
+*/
+
+body {
+  @apply bg-neutral-light-gray text-gray-600;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-semibold tracking-tight text-gray-800;
+}
+
+h2 {
+  @apply text-4xl lg:text-5xl;
+}
+
+h3 {
+  @apply text-2xl lg:text-3xl;
+}
+
+input {
+  @apply block rounded-xl bg-neutral-light-gray px-3 py-2 placeholder:text-gray-400;
+}
+
+label {
+  @apply block text-sm font-medium text-gray-600;
+}
+
+table,
+th,
+td {
+  @apply border border-gray-400 py-2;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+
+.button {
+  @apply rounded-xl font-medium;
+}
+
+.button-accent {
+  @apply bg-accent-900 text-neutral-light-gray;
+}
+
+.button-primary {
+  @apply bg-neutral-dark-blue text-neutral-light-gray;
+}
+
+.button-secondary {
+  @apply border-2 border-neutral-dark-blue text-neutral-dark-blue;
+}
