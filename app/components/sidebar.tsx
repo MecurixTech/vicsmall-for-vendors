@@ -8,7 +8,7 @@ const Sidebar = () => {
   const currentPath = usePathname();
 
   return (
-    <aside className="hidden flex-[3] rounded-xl bg-white p-4 shadow-sm md:block">
+    <aside className="hidden flex-[2] rounded-xl bg-white p-4 shadow-sm md:block">
       {sidebarLinks.map((link) => (
         <Link
           key={link.id}
