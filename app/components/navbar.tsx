@@ -55,7 +55,7 @@ const Navbar = () => {
             width={32}
             className="h-8 w-8 rounded-full"
           />
-          <span className="hidden text-sm sm:block">Favour Udoh</span>
+          <span className="hidden text-xs sm:block">Favour Udoh</span>
         </Link>
       </div>
     </nav>
