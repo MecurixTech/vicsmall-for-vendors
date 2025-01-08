@@ -26,11 +26,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={ubuntu.className}>
         <Navbar />
-        <div className="px-8">
+        <div className="px-4">
           <div className="flex flex-col items-start gap-6 md:flex-row">
             <Sidebar />
             <Tabs />
-            <div className="w-full flex-[10]">{children}</div>
+            <div className="w-full flex-[11]">{children}</div>
           </div>
         </div>
         <Footer />
