@@ -104,7 +104,14 @@ const Products = () => {
                         className="h-12 w-12 rounded-lg object-cover"
                       />
                     </td>
-                    <td>{product.name}</td>
+                    <td>
+                      <Link
+                        href={`products/${product.id}`}
+                        className="hover:underline"
+                      >
+                        {product.name}
+                      </Link>
+                    </td>
                     <td>{product.price}</td>
                     <td className="capitalize">{product.category}</td>
                     <td>
@@ -125,7 +132,8 @@ const Products = () => {
           ) : (
             <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {products.map((product) => (
-                <div
+                <Link
+                  href={`products/${product.id}`}
                   key={product.id}
                   className="relative overflow-hidden rounded-xl bg-white"
                 >
@@ -153,7 +161,7 @@ const Products = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}
