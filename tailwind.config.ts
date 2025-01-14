@@ -22,6 +22,9 @@ export default {
           900: "#FF8C48",
         },
       },
+      screens: {
+        xs: { min: "425px", max: "640px" },
+      },
     },
   },
   plugins: [],

@@ -79,48 +79,84 @@ const Products = () => {
             <button>OUT OF STOCK [15]</button>
           </div>
 
-          <table className="w-full rounded-xl bg-white text-sm shadow-sm">
-            <thead>
-              <tr>
-                <th>IMAGE</th>
-                <th>PRODUCT NAME</th>
-                <th>PRICE</th>
-                <th>PRODUCT CATEGORIES</th>
-                <th>STATUS</th>
-                <th>DATE</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {products.map((product) => (
-                <tr key={product.id}>
-                  <td>
-                    <Image
-                      src={product.imgSrc}
-                      alt={product.name}
-                      height={48}
-                      width={48}
-                      className="h-12 w-12 rounded-lg object-cover"
-                    />
-                  </td>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td className="capitalize">{product.category}</td>
-                  <td>
-                    <span
-                      className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
-                    >
-                      {product.status}
-                    </span>
-                  </td>
-                  <td>{product.date}</td>
-                  <td>
-                    <DeleteOutlined />
-                  </td>
+          {isInListView ? (
+            <table className="w-full rounded-xl bg-white text-sm shadow-sm">
+              <thead>
+                <tr>
+                  <th>IMAGE</th>
+                  <th>PRODUCT NAME</th>
+                  <th>PRICE</th>
+                  <th>PRODUCT CATEGORIES</th>
+                  <th>STATUS</th>
+                  <th>DATE</th>
                 </tr>
+              </thead>
+
+              <tbody>
+                {products.map((product) => (
+                  <tr key={product.id}>
+                    <td>
+                      <Image
+                        src={product.imgSrc}
+                        alt={product.name}
+                        height={48}
+                        width={48}
+                        className="h-12 w-12 rounded-lg object-cover"
+                      />
+                    </td>
+                    <td>{product.name}</td>
+                    <td>{product.price}</td>
+                    <td className="capitalize">{product.category}</td>
+                    <td>
+                      <span
+                        className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
+                      >
+                        {product.status}
+                      </span>
+                    </td>
+                    <td>{product.date}</td>
+                    <td>
+                      <DeleteOutlined />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="relative overflow-hidden rounded-xl bg-white"
+                >
+                  <span
+                    className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} absolute right-4 top-4 rounded-lg p-2 text-xs`}
+                  >
+                    {product.status}
+                  </span>
+                  <Image
+                    src={product.imgSrc}
+                    height={48}
+                    width={48}
+                    alt={product.name}
+                    className="h-32 w-full"
+                  />
+                  <div className="p-2 text-sm">
+                    <p className="font-medium">{product.name}</p>
+                    <p className="text-gray-400">
+                      Category: {product.category}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span>{product.date}</span>
+                      <span className="text-lg font-bold text-gray-800">
+                        {product.price}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          )}
         </div>
       </div>
     </>
