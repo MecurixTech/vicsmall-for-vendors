@@ -2,7 +2,11 @@ import { Card } from "@/components/ui/card";
 import { Leaderboard } from "../app/components/dashboard/leaderboard";
 import { Component as Danny } from "../app/components/dashboard/danny";
 import { Component as ChartTwo } from "../app/components/dashboard/chart-two";
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import Image from "next/image";
+import { MiniChart } from "../app/components/dashboard/mini-chart";
+import { Brand } from "./components/dashboard/brand";
 
 export default function Dashboard() {
   return (
@@ -10,27 +14,40 @@ export default function Dashboard() {
       <div className="grid gap-4 md:grid-cols-12">
         {/* First Row - Net Sales (Spans 8 columns) */}
         <Card className="col-span-6 p-4">
-          <h2 className="mb-4 text-2xl font-semibold">User Statistics</h2>
-
+          <h2 className="mb-4 text-2xl font-bold">User Statistics</h2>
+          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
           <div className="grid grid-cols-2 gap-4">
+          <div className="flex gap-2">
+              <div>
+                <p className="text-base font-normal text-muted-foreground">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold">$11,210</p>
+                <div>
+                  <TrendingDownIcon color="error" fontSize="small" />
+                  <span className="text-xs font-normal text-red-500"> 12%</span>
+                </div>
+              </div>
+              <MiniChart />
+            </div>
+            {/* <div className="w-[1px] h-full bg-black "></div> */}
             <div className="flex gap-2">
               <div>
-                <p className="text-sm text-muted-foreground">Daily Sales</p>
-                <p className="text-2xl font-bold">$910</p>
-                <p className="text-sm text-red-500">↓ 15%</p>
+                <p className="text-base font-normal text-muted-foreground">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold">$11,210</p>
+                <div>
+                <TrendingUpIcon sx={{ color: 'green' }} fontSize="small" />
+                  <span className="text-xs font-normal text-green-500"> 12%</span>
+                </div>
               </div>
-              <h1 className="self-center">hello</h1>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted-foreground">Total Product</p>
-              <p className="text-2xl font-bold">$2621</p>
-              <p className="text-sm text-green-500">↑ 8%</p>
+              <MiniChart />
             </div>
           </div>
         </Card>
 
-        {/* First Row - User Statistics (Spans 4 columns) */}
+        {/* First Row - User Statistics (Spans 6 columns) */}
         <Card className="col-span-6 p-4">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Net Sales</h2>
@@ -46,29 +63,48 @@ export default function Dashboard() {
           </div>
         </Card>
 
-        {/* Second Row - Sales Statistics (Spans 8 columns) */}
+        {/* Second Row - Sales Statistics (Spans 6 columns) */}
         <Card className="col-span-6 p-4">
-          <h2 className="mb-4 text-lg font-semibold">Sales Statistics</h2>
+          <h2 className="mb-4 text-2xl font-bold">Sales Statistics</h2>
+          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Daily Sales</p>
-              <p className="text-2xl font-bold">$910</p>
-              <p className="text-sm text-red-500">↓ 15%</p>
+          <div className="flex gap-2">
+              <div>
+                <p className="text-base font-normal text-muted-foreground">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold">$11,210</p>
+                <div>
+                  <TrendingDownIcon color="error" fontSize="small" />
+                  <span className="text-xs font-normal text-red-500"> 12%</span>
+                </div>
+              </div>
+              <MiniChart />
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Total Product</p>
-              <p className="text-2xl font-bold">$2621</p>
-              <p className="text-sm text-green-500">↑ 8%</p>
+            {/* <div className="w-[1px] h-full bg-black "></div> */}
+            <div className="flex gap-2">
+              <div>
+                <p className="text-base font-normal text-muted-foreground">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold">$11,210</p>
+                <div>
+                  <TrendingDownIcon color="error" fontSize="small" />
+                  <span className="text-xs font-normal text-red-500"> 12%</span>
+                </div>
+              </div>
+              <MiniChart />
             </div>
           </div>
         </Card>
 
-        {/* Second Row - Brand Category (Spans 4 columns) */}
+
+        {/* Second Row - Brand Category (Spans 6 columns) */}
         <Card className="col-span-6 p-4">
           <ChartTwo />
         </Card>
 
-        {/* Third Row - Leaderboard (Spans 8 columns) */}
+        {/* Third Row - Leaderboard (Spans 6 columns) */}
         <Card className="col-span-6">
           <Leaderboard />
         </Card>
@@ -76,7 +112,7 @@ export default function Dashboard() {
         {/* Third Row - Sales Category and Trending Now (Spans 4 columns) */}
         <div className="col-span-6 grid grid-rows-1 gap-4">
           <Card className="p-4">
-            <ChartTwo />
+           <Brand/>
           </Card>
 
           <Card className="">

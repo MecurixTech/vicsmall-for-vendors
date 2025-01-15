@@ -52,13 +52,13 @@ const CustomLabel = ({ name, value, products }: any) => (
   </div>
 );
 
-export function Component() {
+export function Brand() {
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="text-xl font-semibold">Sales Category</CardTitle>
+        <CardTitle className="text-xl font-semibold">Brand Category</CardTitle>
         <select className="rounded-md border border-gray-200 px-3 py-1 text-sm outline-none">
           <option value="week">Week</option>
           <option value="month">Month</option>
