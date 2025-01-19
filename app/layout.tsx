@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Ubuntu } from "next/font/google";
 
 import "./globals.css";
-import Sidebar from "./components/sidebar";
-import Tabs from "./components/tabs";
-import Navbar from "./components/navbar";
-import Footer from "./components/footer";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -24,17 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={ubuntu.className}>
-        <Navbar />
-        <div className="px-8">
-          <div className="flex flex-col items-start gap-6 md:flex-row">
-            <Sidebar />
-            <Tabs />
-            <div className="w-full flex-[10]">{children}</div>
-          </div>
-        </div>
-        <Footer />
-      </body>
+      <body className={ubuntu.className}>{children}</body>
     </html>
   );
 }
