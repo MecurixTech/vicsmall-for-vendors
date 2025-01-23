@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
-import { ClipboardList, Clock, CheckCircle, RotateCw, MoreVertical } from "lucide-react"
+import {Assignment, AccessTime, CheckCircleOutline, Refresh, MoreVert} from '@mui/icons-material';
 
 type OrderStatus = "pending" | "completed" | "canceled"
 
@@ -61,32 +61,32 @@ const Home = () => {
      
       <div className="p-6 space-y-6 max-w-7xl mx-auto">
       <Card className="bg-[#040458] text-white">
-        <CardContent className="p-6">
+        <CardContent className="p-6 ">
           <h2 className="text-lg font-semibold mb-4 text-white">ORDER STATUS</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <ClipboardList className="h-5 w-5" />
+              <Assignment className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">{stats.allOrders}</div>
                 <div className="text-xs opacity-70">ALL ORDERS</div>
               </div>
             </div>
             <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <Clock className="h-5 w-5" />
+              <AccessTime className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">{stats.pending}</div>
                 <div className="text-xs opacity-70">PENDING</div>
               </div>
             </div>
             <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <CheckCircle className="h-5 w-5" />
+              <CheckCircleOutline className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">{stats.completed}</div>
                 <div className="text-xs opacity-70">COMPLETED</div>
               </div>
             </div>
             <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <RotateCw className="h-5 w-5" />
+              <Refresh className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">{stats.inProgress}</div>
                 <div className="text-xs opacity-70">PROGRESS</div>
@@ -142,7 +142,7 @@ const Home = () => {
                   </TableCell>
                   <TableCell>
                     <Button variant="ghost" size="icon">
-                      <MoreVertical className="h-4 w-4" />
+                      <MoreVert className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
