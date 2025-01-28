@@ -112,3 +112,86 @@ export const reviews = [
     customer: "Hank",
   },
 ];
+
+export const products = [
+  {
+    id: 0,
+    status: "Available",
+    name: "Fancy Bikini",
+    category: "lingerie",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "30/12/2024",
+  },
+  {
+    id: 1,
+    status: "out of stock",
+    name: "Elegant Dress",
+    category: "clothing",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "15/01/2025",
+  },
+  {
+    id: 2,
+    status: "Available",
+    name: "Running Shoes",
+    category: "footwear",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "20/02/2025",
+  },
+  {
+    id: 3,
+    status: "Available",
+    name: "Leather Jacket",
+    category: "outerwear",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "10/03/2025",
+  },
+  {
+    id: 4,
+    status: "Available",
+    name: "Smart Watch",
+    category: "electronics",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "25/03/2025",
+  },
+  {
+    id: 5,
+    status: "Out of stock",
+    name: "Wireless Earbuds",
+    category: "electronics",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "05/04/2025",
+  },
+  {
+    id: 6,
+    status: "Out of stock",
+    name: "Yoga Mat",
+    category: "fitness",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "15/04/2025",
+  },
+  {
+    id: 7,
+    status: "Available",
+    name: "Gaming Chair",
+    category: "furniture",
+    imgSrc:
+      "https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP",
+    price: "$100",
+    date: "25/04/2025",
+  },
+];
