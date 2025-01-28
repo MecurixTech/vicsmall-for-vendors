@@ -1,279 +1,203 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import {Assignment, AccessTime, CheckCircleOutline, Refresh, MoreVert} from '@mui/icons-material';
+import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {Home, LocalShipping, CheckCircleOutline, ShoppingBag, Inventory} from '@mui/icons-material';
 
-type OrderStatus = "pending" | "completed" | "canceled"
-
-interface Order {
-  id: string
-  customerName: string
-  amount: number
-  status: OrderStatus
-}
-
-const stats = {
-  allOrders: 7000,
-  pending: 200,
-  completed: 1000,
-  inProgress: 250,
-}
-
-
-const orders: Order[] = [
-  { id: "#VICS765", customerName: "VERA", amount: 100, status: "pending" },
-  { id: "#VICS545", customerName: "SUSAN", amount: 10, status: "completed" },
-  { id: "#VICS543", customerName: "DAVE", amount: 100, status: "canceled" },
-  { id: "#VICS765", customerName: "FRED", amount: 10, status: "pending" },
-  { id: "#VICS545", customerName: "CHIKE", amount: 100, status: "completed" },
-  { id: "#VICS543", customerName: "DOM", amount: 10, status: "canceled" },
-  { id: "#VICS765", customerName: "VIN", amount: 100, status: "pending" },
-  { id: "#VICS545", customerName: "STAR", amount: 10, status: "completed" },
-  { id: "#VICS543", customerName: "TREM", amount: 100, status: "canceled" },
-  { id: "#VICS765", customerName: "STEPH", amount: 10, status: "pending" },
-  { id: "#VICS545", customerName: "NKEM", amount: 100, status: "completed" },
-  { id: "#VICS543", customerName: "ANDY", amount: 10, status: "canceled" },
-]
-
-const Home = () => {
-  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set())
-
-  const handleOrderSelect = (orderId: string) => {
-    const newSelected = new Set(selectedOrders)
-    if (newSelected.has(orderId)) {
-      newSelected.delete(orderId)
-    } else {
-      newSelected.add(orderId)
-    }
-    setSelectedOrders(newSelected)
-  }
+const HomePage = () => {
   return (
-    <div className="p-4">
-      <div className="grid gap-4 md:grid-cols-12">
-        {/* First Row - Net Sales (Spans 8 columns) */}
-        <Card className="col-span-6 p-4">
-          <h2 className="mb-4 text-2xl font-bold">User Statistics</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <div className="grid grid-cols-2 gap-4">
-          <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$11,210</p>
-                <div>
-                  <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500"> 12%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-            {/* <div className="w-[1px] h-full bg-black "></div> */}
-            <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$11,210</p>
-                <div>
-                <TrendingUpIcon sx={{ color: 'green' }} fontSize="small" />
-                  <span className="text-xs font-normal text-green-500"> 12%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-          </div>
-        </Card>
+    <>
+      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Dashboard</h1>
 
-        {/* First Row - User Statistics (Spans 6 columns) */}
-        <Card className="col-span-6 p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Net Sales</h2>
-            <select className="rounded-md border px-2 py-1 text-sm">
-              <option>Week</option>
-              <option>Month</option>
-              <option>Year</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4">
-            <Danny />
-          </div>
-        </Card>
-
-        {/* Second Row - Sales Statistics (Spans 6 columns) */}
-        <Card className="col-span-6 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Sales Statistics</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <div className="grid grid-cols-2 gap-4">
-          <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$11,210</p>
-                <div>
-                  <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500"> 12%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-            {/* <div className="w-[1px] h-full bg-black "></div> */}
-            <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$11,210</p>
-                <div>
-                  <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500"> 12%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-          </div>
-        </Card>
-     
-      <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      <Card className="bg-[#040458] text-white">
-        <CardContent className="p-6 ">
-          <h2 className="text-lg font-semibold mb-4 text-white">ORDER STATUS</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <Assignment className="h-5 w-5" />
-              <div>
-                <div className="text-2xl font-bold">{stats.allOrders}</div>
-                <div className="text-xs opacity-70">ALL ORDERS</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <AccessTime className="h-5 w-5" />
-              <div>
-                <div className="text-2xl font-bold">{stats.pending}</div>
-                <div className="text-xs opacity-70">PENDING</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <CheckCircleOutline className="h-5 w-5" />
-              <div>
-                <div className="text-2xl font-bold">{stats.completed}</div>
-                <div className="text-xs opacity-70">COMPLETED</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white/10 rounded-lg p-4">
-              <Refresh className="h-5 w-5" />
-              <div>
-                <div className="text-2xl font-bold">{stats.inProgress}</div>
-                <div className="text-xs opacity-70">PROGRESS</div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="bg-white rounded-lg p-6">
-        <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
-          <span>ALL ORDERS (250)</span>
-          <span>DELIVERED (120)</span>
-          <span>PICKUP (80)</span>
-          <span>CANCELED (34)</span>
-        </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12"></TableHead>
-                <TableHead>ORDER ID</TableHead>
-                <TableHead>CUSTOMER NAME</TableHead>
-                <TableHead>AMOUNT</TableHead>
-                <TableHead>STATUS</TableHead>
-                <TableHead className="w-12"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedOrders.has(order.id)}
-                      onCheckedChange={() => handleOrderSelect(order.id)}
-                    />
-                  </TableCell>
-                  <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.customerName}</TableCell>
-                  <TableCell>${order.amount}</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm ${
-                        order.status === "pending"
-                          ? "bg-purple-100 text-purple-700"
-                          : order.status === "completed"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="ghost" size="icon">
-                      <MoreVert className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-    </div>
     
-    </>
-  );
-};
+        <div className="container mx-auto px-4 py-8">
+          {/* Breadcrumb */}
+          <div className="mb-6 text-sm">
+            <span className="text-gray-600">Orders</span>
+            <span className="mx-2">·</span>
+            <span className="font-medium">Order Details</span>
+          </div>
 
-        {/* Second Row - Brand Category (Spans 6 columns) */}
-        <Card className="col-span-6 p-4">
-          <ChartTwo />
-        </Card>
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Left Column */}
+            <div className="bg-white rounded-lg p-4 md:p-6 shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <h1 className="text-xl font-semibold">Order #VICS765</h1>
+                <Button variant="outline" className="w-full sm:w-auto bg-[#FF7A45] text-white hover:bg-[#FF7A45]/90">
+                  Invoice
+                </Button>
+              </div>
 
-        {/* Third Row - Leaderboard (Spans 6 columns) */}
-        <Card className="col-span-6">
-          <Leaderboard />
-        </Card>
+              <div className="overflow-x-auto -mx-4 md:mx-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[200px]">PRODUCT</TableHead>
+                      <TableHead className="min-w-[100px]">PRICE</TableHead>
+                      <TableHead className="min-w-[100px]">QUANTITY</TableHead>
+                      <TableHead className="min-w-[120px] text-right">TOTAL AMOUNT</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {[...Array(6)].map((_, i) => (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            <Image
+                              src="/image.png"
+                              alt="Fancy Bikini"
+                              width={40}
+                              height={40}
+                              className="rounded-md"
+                            />
+                            <span className="whitespace-nowrap">Fancy Bikini</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>$100</TableCell>
+                        <TableCell>{i === 2 ? "15" : i === 5 ? "20" : "02"}</TableCell>
+                        <TableCell className="text-right">${i === 2 ? "1500" : i === 5 ? "2000" : "200"}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
 
-        {/* Third Row - Sales Category and Trending Now (Spans 4 columns) */}
-        <div className="col-span-6 grid grid-rows-1 gap-4">
-          <Card className="p-4">
-           <Brand/>
-          </Card>
-
-          <Card className="">
-            <div className="relative">
-              <img
-                src="/jacket.jpeg"
-                alt="Wooly Jacket"
-                className="h-40 w-full rounded-lg object-cover shadow-sm"
-              />
-              <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
-                <h2 className="text-lg font-semibold text-white">
-                  Trending now
-                </h2>
-                <div>
-                  <p className="font-semibold">Wooly Jacket</p>
-                  <p className="font-semibold">$144.99</p>
+              <div className="mt-8">
+                <h2 className="font-semibold mb-4">Shipping Information</h2>
+                <div className="space-y-3 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <span className="text-gray-500">NAME:</span>
+                    <span className="sm:col-span-2">Vera</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <span className="text-gray-500">ADDRESS:</span>
+                    <span className="sm:col-span-2">15th dema street, Dubai</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <span className="text-gray-500">PHONE NUMBER:</span>
+                    <span className="sm:col-span-2">+971 456 444 566</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <span className="text-gray-500">EMAIL ADDRESS:</span>
+                    <span className="sm:col-span-2">vera@gmail.com</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </Card>
+
+            {/* Right Column */}
+            <div className="space-y-8">
+              <div className="bg-white rounded-lg p-4 md:p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <span className="text-gray-500">SUBTOTAL :</span>
+                    <span>$4,300.00</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <span className="text-gray-500">DISCOUNT :</span>
+                    <span>$100.00</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <span className="text-gray-500">SHIPPING CHARGE :</span>
+                    <span>$45.00</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <span className="text-gray-500">ESTIMATED TAX :</span>
+                    <span>$0.00</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-2 font-semibold">
+                    <span className="text-gray-500">TOTAL (USD) :</span>
+                    <span>$4,235.00</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                    <Input placeholder="Enter Discount" className="flex-1" />
+                    <Button className="w-full sm:w-auto bg-[#FF7A45] text-white hover:bg-[#FF7A45]/90">Apply</Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg p-4 md:p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-2">Order Tracking</h2>
+                <div className="text-sm text-gray-500 mb-6">TRACKING ID: 1DFDSNCBCO</div>
+                <div className="space-y-8">
+                  <div className="flex gap-4">
+                    <div className="relative shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#FF7A45] flex items-center justify-center text-white">
+                        <ShoppingBag className="w-5 h-5" />
+                      </div>
+                      <div className="absolute top-10 bottom-0 left-1/2 w-0.5 h-16 bg-gray-200" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold">Order Placed</h3>
+                      <p className="text-sm text-gray-500 break-words">An order as been placed</p>
+                      <p className="text-sm text-gray-500">05 Dec 2024 15:46</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="relative shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#FF7A45] flex items-center justify-center text-white">
+                        <Inventory className="w-5 h-5" />
+                      </div>
+                      <div className="absolute top-10 bottom-0 left-1/2 w-0.5 h-16 bg-gray-200" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold">Packed</h3>
+                      <p className="text-sm text-gray-500 break-words">Picked up by courier partner</p>
+                      <p className="text-sm text-gray-500">06 Dec 2024 10:45</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="relative shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-[#FF7A45] flex items-center justify-center text-white">
+                        <LocalShipping className="w-5 h-5" />
+                      </div>
+                      <div className="absolute top-10 bottom-0 left-1/2 w-0.5 h-16 bg-gray-200" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold">Shipped</h3>
+                      <p className="text-sm text-gray-500 break-words">ASAP Logistics</p>
+                      <p className="text-sm text-gray-500">06 Dec 2024 14:45</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="relative shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                        <Home className="w-5 h-5" />
+                      </div>
+                      <div className="absolute top-10 bottom-0 left-1/2 w-0.5 h-16 bg-gray-200" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-gray-500">Out for Delivery</h3>
+                      <p className="text-sm text-gray-500 break-words">An order as been placed</p>
+                      <p className="text-sm text-gray-500">05 Dec 2024 15:46</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                        <CheckCircleOutline className="w-5 h-5" />
+                      </div>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-gray-500">Delivered</h3>
+                      <p className="text-sm text-gray-500 break-words">An order as been placed</p>
+                      <p className="text-sm text-gray-500">05 Dec 2024 15:46</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  );
+    </>
+  )
 }
+
+export default HomePage
