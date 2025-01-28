@@ -61,15 +61,18 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+  		screens: {
+  			xs: {
+  				min: '425px',
+  				max: '640px'
+  			}
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		},
-      screens: {
-        xs: { min: "425px", max: "640px" },
-      },
-  	},
+  		}
+  	}
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
