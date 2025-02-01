@@ -6,10 +6,22 @@ import {
 } from "@mui/icons-material";
 import Image from "next/image";
 
-const ProductDetailsPage = ({ params }: { params: { slug: string } }) => {
+
+interface Product {
+  id: number | string; // Adjust type to match your product ID type
+  name: string;
+  description?: string; // Add other properties as needed
+}
+
+const ProductDetailsPage = ({
+  params,
+}: {
+  params: { slug: string };
+}) => {
   const product = products.find(
-    (product) => product.id.toString() === params.slug,
+    (product: Product) => product.id.toString() === params.slug,
   );
+
   if (!product) {
     return (
       <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
