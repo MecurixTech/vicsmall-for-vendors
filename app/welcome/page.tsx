@@ -10,9 +10,9 @@ export default function WelcomeScreen() {
           <div className="space-y-4 text-gray-600">
             <p>
               Thank you for choosing The Marketplace to power your online store! This quick setup wizard will help you
-              configure the basic settings. It's completely optional and shouldn't take longer than two minutes.
+              configure the basic settings. It&apos;s completely optional and shouldn&apos;t take longer than two minutes.
             </p>
-            <p>No time right now? If you don't want to go through the wizard, you can skip and return to the Store!</p>
+<p>No time right now? If you don&apos;t want to go through the wizard, you can skip and return to the Store!</p>
           </div>
         </div>
         <div className="mt-12 flex justify-end">

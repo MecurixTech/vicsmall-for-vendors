@@ -36,12 +36,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const CustomLabel = ({ name, value, products }: any) => (
+interface CustomLabelProps {
+  name: string;
+  value: number;
+  products: number;
+}
+
+const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
   <div className="flex items-center justify-between gap-4 text-sm">
     <div className="flex items-center gap-3">
       <div
         className="h-2 w-2 flex-shrink-0 rounded-full"
-        style={{ backgroundColor: chartConfig[name.toLowerCase()].color }}
+style={{ backgroundColor: chartConfig[name.toLowerCase() as keyof typeof chartConfig].color }}
       />
       <div className="flex flex-col">
         <span className="font-medium">{name}</span>
@@ -51,6 +57,7 @@ const CustomLabel = ({ name, value, products }: any) => (
     <span className="font-medium">${value}</span>
   </div>
 );
+
 
 export function Component() {
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
