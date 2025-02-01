@@ -87,15 +87,29 @@ export default function SignIn() {
 
         <div className="flex justify-center gap-4">
           <button type="button" className="p-2 border rounded-lg hover:bg-gray-50">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-6 h-6" />
+          <svg className="w-6 h-6">
+  <image 
+    href="https://www.svgrepo.com/show/475656/google-color.svg" 
+    width="100%" 
+    height="100%" 
+  />
+</svg>
           </button>
+
+
           <button type="button" className="p-2 border rounded-lg hover:bg-gray-50">
-            <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-6 h-6" />
+           <svg className="w-6 h-6">
+ <image 
+   href="https://www.svgrepo.com/show/475647/facebook-color.svg" 
+   width="100%" 
+   height="100%" 
+ />
+</svg>
           </button>
         </div>
 
         <p className="text-center text-sm text-gray-600">
-          Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
           <Link href="/Sign-Up" className="text-purple-700 hover:text-purple-800">
             Sign up as a Vendor
           </Link>
