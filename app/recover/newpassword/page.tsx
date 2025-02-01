@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { EyeIcon, EyeOffIcon } from "lucide-react"
+import {Visibility, VisibilityOff} from '@mui/icons-material';
 
 export default function NewPassword() {
   const [showPassword, setShowPassword] = useState(false)
@@ -29,7 +29,7 @@ export default function NewPassword() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-2.5 text-gray-400"
                 >
-                  {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+                  {showPassword ? <VisibilityOff className="h-5 w-5" /> : <Visibility className="h-5 w-5" />}
                 </button>
               </div>
             </div>
