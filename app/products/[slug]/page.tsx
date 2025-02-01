@@ -6,14 +6,13 @@ import {
 } from "@mui/icons-material";
 import Image from "next/image";
 
-
 interface Product {
-  id: number | string; // Adjust type to match your product ID type
+  id: number | string;
   name: string;
-  description?: string; // Add other properties as needed
+  description?: string; // Add other fields as needed
 }
 
-const ProductDetailsPage = ({
+const ProductDetailsPage = async ({
   params,
 }: {
   params: { slug: string };
@@ -26,8 +25,7 @@ const ProductDetailsPage = ({
     return (
       <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
     );
-  }
-  return (
+  }  return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">
         Product details
