@@ -5,14 +5,17 @@ import Image from "next/image"
 interface Product {
   id: number | string
   name: string
-  description?: string // Add other fields as needed
+  description?: string
 }
 
-const ProductDetailsPage = async ({
-  params,
-}: {
-  params: { slug: string }
-}) => {
+interface PageProps {
+  params: {
+    slug: string
+  }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+const ProductDetailsPage = async ({ params }: PageProps) => {
   const product = products.find((product: Product) => product.id.toString() === params.slug)
 
   if (!product) {
