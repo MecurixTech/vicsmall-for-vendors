@@ -1,25 +1,30 @@
-import { products } from "@/app/data/dummyData";
-import {
-  EditOutlined,
-  Inventory2Outlined,
-  LocalOfferOutlined,
-} from "@mui/icons-material";
-import Image from "next/image";
+import { products } from "@/app/data/dummyData"
+import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material"
+import Image from "next/image"
 
-const ProductDetailsPage = ({ params }: { params: { slug: string } }) => {
-  const product = products.find(
-    (product) => product.id.toString() === params.slug,
-  );
-  if (!product) {
-    return (
-      <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
-    );
+interface Product {
+  id: number | string
+  name: string
+  description?: string
+}
+
+interface PageProps {
+  params: {
+    slug: string
   }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+const ProductDetailsPage = async ({ params }: PageProps) => {
+  const product = products.find((product: Product) => product.id.toString() === params.slug)
+
+  if (!product) {
+    return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
+  }
+
   return (
     <>
-      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">
-        Product details
-      </h1>
+      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product details</h1>
 
       <div className="flex flex-wrap items-start gap-4">
         <div className="flex-1">
@@ -63,22 +68,18 @@ const ProductDetailsPage = ({ params }: { params: { slug: string } }) => {
             </div>
           </div>
           <div className="rounded-xl bg-white p-8 text-sm shadow-sm">
-            <h3 className="mb-2 text-base font-medium text-gray-800">
-              PRODUCT FULL DESCRIPTION
-            </h3>
+            <h3 className="mb-2 text-base font-medium text-gray-800">PRODUCT FULL DESCRIPTION</h3>
             <p className="mb-1">
-              Turn heads at the beach or poolside with this stunning Fancy
-              Bikini, designed to combine elegance with comfort.
+              Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
+              comfort.
             </p>
             <p className="mb-1">
-              Sophisticated Design: Featuring a chic cut and vibrant colors that
-              flatter every body type, this bikini offers a blend of boldness
-              and grace.
+              Sophisticated Design: Featuring a chic cut and vibrant colors that flatter every body type, this bikini
+              offers a blend of boldness and grace.
             </p>
             <p>
-              Premium Fabric: Made from high-quality, quick-drying materials, it
-              provides a silky-smooth feel while ensuring durability and
-              breathability.
+              Premium Fabric: Made from high-quality, quick-drying materials, it provides a silky-smooth feel while
+              ensuring durability and breathability.
             </p>
           </div>
         </div>
@@ -95,34 +96,24 @@ const ProductDetailsPage = ({ params }: { params: { slug: string } }) => {
             </button>
           </div>
 
-          <h3 className="mb-1 text-base font-medium text-gray-800">
-            PRODUCT SHORT DESCRIPTION
-          </h3>
+          <h3 className="mb-1 text-base font-medium text-gray-800">PRODUCT SHORT DESCRIPTION</h3>
           <p className="mb-4 text-sm">
-            Turn heads at the beach or poolside with this stunning Fancy Bikini,
-            designed to combine elegance with comfort. Sophisticated Design:
-            Featuring a chic cut and vibrant colors that flatter every body
-            type, this bikini offers a blend of boldness and grace. Premium
-            Fabric: Made from high-quality, quick-drying materials, it provides
-            a silky-smooth feel while ensuring durability and breathability.
+            Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
+            comfort. Sophisticated Design: Featuring a chic cut and vibrant colors that flatter every body type, this
+            bikini offers a blend of boldness and grace. Premium Fabric: Made from high-quality, quick-drying materials,
+            it provides a silky-smooth feel while ensuring durability and breathability.
           </p>
 
           <div className="mb-8 flex gap-4">
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
-              <LocalOfferOutlined
-                fontSize="large"
-                className="text-accent-900"
-              />
+              <LocalOfferOutlined fontSize="large" className="text-accent-900" />
               <div>
                 <p className="text-2xl font-bold text-gray-800">$100</p>
                 <p className="text-gray-500">Price</p>
               </div>
             </div>
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
-              <Inventory2Outlined
-                fontSize="large"
-                className="text-accent-900"
-              />
+              <Inventory2Outlined fontSize="large" className="text-accent-900" />
               <div>
                 <p className="text-2xl font-bold text-gray-800">275</p>
                 <p className="text-gray-500">Stock available</p>
@@ -189,7 +180,8 @@ const ProductDetailsPage = ({ params }: { params: { slug: string } }) => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ProductDetailsPage;
+export default ProductDetailsPage
+

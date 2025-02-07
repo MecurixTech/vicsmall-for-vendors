@@ -20,7 +20,6 @@ interface ChartContainerProps {
 }
 
 export function ChartContainer({
-  config,
   children,
   className,
 }: ChartContainerProps) {

@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import Image from "next/image";
 import { Leaderboard } from "../app/components/dashboard/leaderboard";
 import { Component as Danny } from "../app/components/dashboard/danny";
 import { Component as ChartTwo } from "../app/components/dashboard/chart-two";
@@ -117,11 +118,13 @@ export default function Dashboard() {
 
           <Card className="">
             <div className="relative">
-              <img
-                src="/jacket.jpeg"
-                alt="Wooly Jacket"
-                className="h-40 w-full rounded-lg object-cover shadow-sm"
-              />
+<Image
+  src="/jacket.jpeg"
+  alt="Wooly Jacket"
+  width={400}
+  height={160}
+  className="h-40 w-full rounded-lg object-cover shadow-sm"
+/>
               <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
                 <h2 className="text-lg font-semibold text-white">
                   Trending now
