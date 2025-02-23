@@ -75,7 +75,7 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
             and grace. Made from high-quality, quick-drying materials, it provides a silky-smooth feel while ensuring
             durability and breathability.
           </p>
-
+//class
           <div className="mb-8 flex gap-4">
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
               <LocalOfferOutlined fontSize="large" className="text-accent-900" />
