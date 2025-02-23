@@ -9,7 +9,7 @@ const ChangePasswordForm = () => {
     new_password: "",
     confirm_new_password: "",
   };
-
+//Just ignore this
   const validationSchema = Yup.object({
     current_password: Yup.string().required("Current password is required"),
     new_password: Yup.string().required("New password is required"),
