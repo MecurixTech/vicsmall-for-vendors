@@ -2,7 +2,7 @@ import { products } from "@/app/data/dummyData";
 import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
 import Image from "next/image";
 
-interface products {
+interface Product {
   id: number | string;
   name: string;
   description?: string;
@@ -10,15 +10,19 @@ interface products {
 
 interface PageProps {
   params: { slug: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-const productDetailsPage = async ({ params }: PageProps) => {
+const ProductDetailsPage = async ({ params }: PageProps) => {
+  // Ensure params.slug is a string
+  if (!params?.slug) {
+    return <h1 className="text-3xl font-bold text-gray-800">Invalid product!</h1>;
+  }
+
   const product = products.find((p) => p.id.toString() === params.slug);
 
   if (!product) {
-    return <h1 className="text-3xl font-bold text-gray-800">product not found!</h1>;
-  }
+    return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>;
+  
 
   const productImages = Array(5).fill("https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP");
 
