@@ -1,26 +1,25 @@
-import { products } from "@/app/data/dummyData"
-import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material"
-import Image from "next/image"
+import { products } from "@/app/data/dummyData";
+import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
+import Image from "next/image";
 
 interface Product {
-  id: number | string
-  name: string
-  description?: string
+  id: number | string;
+  name: string;
+  description?: string;
 }
 
 interface PageProps {
-  params: {
-    slug: string
-  }
-  searchParams?: { [key: string]: string | string[] | undefined }
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-const ProductDetailsPage = ({ params }: PageProps) => {
-  const product = products.find((product: Product) => product.id.toString() === params.slug)
+const ProductDetailsPage = async ({ params }: PageProps) => {
+  const product = products.find((p) => p.id.toString() === params.slug);
 
   if (!product) {
-    return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
+    return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>;
   }
+
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product details</h1>
