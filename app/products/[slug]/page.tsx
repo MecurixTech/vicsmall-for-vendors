@@ -15,13 +15,12 @@ interface PageProps {
   searchParams?: { [key: string]: string | string[] | undefined }
 }
 
-const ProductDetailsPage = async ({ params }: PageProps) => {
+const ProductDetailsPage = ({ params }: PageProps) => {
   const product = products.find((product: Product) => product.id.toString() === params.slug)
 
   if (!product) {
     return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
   }
-
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product details</h1>
