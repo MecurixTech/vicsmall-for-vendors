@@ -61,8 +61,8 @@ export default function Signup() {
       }
 
       router.push("/Sign-in")
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    
+    } catch (err: unknown) {
       setError(err.message)
     } finally {
       setLoading(false)
