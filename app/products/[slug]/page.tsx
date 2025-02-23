@@ -2,7 +2,7 @@ import { products } from "@/app/data/dummyData";
 import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
 import Image from "next/image";
 
-interface Product {
+interface products {
   id: number | string;
   name: string;
   description?: string;
@@ -13,21 +13,21 @@ interface PageProps {
   searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-const ProductDetailsPage = async ({ params }: PageProps) => {
+const productDetailsPage = async ({ params }: PageProps) => {
   const product = products.find((p) => p.id.toString() === params.slug);
 
   if (!product) {
-    return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>;
+    return <h1 className="text-3xl font-bold text-gray-800">product not found!</h1>;
   }
 
   const productImages = Array(5).fill("https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP");
 
   return (
     <>
-      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product details</h1>
+      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">product details</h1>
 
       <div className="flex flex-wrap items-start gap-4">
-        {/* Product Image Section */}
+        {/* product Image Section */}
         <div className="flex-1">
           <div className="mb-4 rounded-xl bg-white p-8 shadow-sm">
             <Image src={productImages[0]} alt={product.name} height={96} width={96} className="w-full" />
@@ -38,7 +38,7 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
             </div>
           </div>
           <div className="rounded-xl bg-white p-8 text-sm shadow-sm">
-            <h3 className="mb-2 text-base font-medium text-gray-800">PRODUCT FULL DESCRIPTION</h3>
+            <h3 className="mb-2 text-base font-medium text-gray-800">product FULL DESCRIPTION</h3>
             <p className="mb-1">
               Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
               comfort.
@@ -54,12 +54,12 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
           </div>
         </div>
 
-        {/* Product Details Section */}
+        {/* product Details Section */}
         <div className="flex-[2]">
           <div className="mb-4 flex items-start justify-between">
             <div>
               <h2 className="text-2xl">{product.name}</h2>
-              <p className="text-sm">PRODUCT ID: VIC2345</p>
+              <p className="text-sm">product ID: VIC2345</p>
             </div>
 
             <button className="flex items-center gap-1 rounded-xl bg-accent-900 px-4 py-2 text-white">
@@ -68,7 +68,7 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
             </button>
           </div>
 
-          <h3 className="mb-1 text-base font-medium text-gray-800">PRODUCT SHORT DESCRIPTION</h3>
+          <h3 className="mb-1 text-base font-medium text-gray-800">product SHORT DESCRIPTION</h3>
           <p className="mb-4 text-sm">
             Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
             comfort. Featuring a chic cut and vibrant colors that flatter every body type, this bikini blends boldness
@@ -133,4 +133,4 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
   );
 };
 
-export default ProductDetailsPage;
+export default productDetailsPage;
