@@ -59,6 +59,8 @@ export default function SignIn() {
 
        // alert("Login successful!");
       router.push("/");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     } catch (err: any) {
       setError(err.message);
     } finally {
