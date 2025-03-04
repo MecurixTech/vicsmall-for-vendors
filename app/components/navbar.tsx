@@ -14,7 +14,7 @@ const Navbar = () => {
       setfullName(storedfullName);
     }
   }, []);
-
+//integration
   return (
     <nav className="mb-8 flex items-center justify-between bg-white px-8 py-2">
       <Image
