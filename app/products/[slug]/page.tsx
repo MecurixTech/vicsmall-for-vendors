@@ -2,13 +2,13 @@ import { products } from "@/app/data/dummyData";
 import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
 import Image from "next/image";
 
-
 interface PageProps {
   params: { slug: string };
 }
 
-const ProductDetailsPage = async ({ params }: PageProps) => {
-  // Ensure params.slug is a string
+const ProductDetailsPage = ({ params }: PageProps) => {
+  console.log("Params received:", params);
+
   if (!params?.slug) {
     return <h1 className="text-3xl font-bold text-gray-800">Invalid product!</h1>;
   }
