@@ -2,11 +2,6 @@ import { products } from "@/app/data/dummyData";
 import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
 import Image from "next/image";
 
-interface Product {
-  id: number | string;
-  name: string;
-  description?: string;
-}
 
 interface PageProps {
   params: { slug: string };
