@@ -1,27 +1,36 @@
 "use client";
 
 import { Formik, Form, Field } from "formik";
+import { useEffect, useState } from "react";
 
 const ProfileForm = () => {
-  const initialValues = {
-    full_name: "John Doe",
-    email: "doe@gmail.com",
-    phone_number: "+234 901 773 9920",
-    about_me: "This is some information about John Doe",
-  };
+  const [initialValues, setInitialValues] = useState({
+    full_name: "",
+    email: "",
+    phone_number: "",
+    about_me: "",
+  });
 
-  const handleSubmit = (values: {
-    full_name: string;
-    email: string;
-    phone_number: string;
-    about_me: string;
-  }) => {
+  useEffect(() => {
+    setInitialValues({
+      full_name: localStorage.getItem("fullName") || "",
+      email: localStorage.getItem("email") || "",
+      phone_number: localStorage.getItem("phoneNumber") || "",
+      about_me: localStorage.getItem("aboutMe") || "This is some information about John Doe",
+    });
+  }, []);
+
+  const handleSubmit = (values) => {
     console.log(values);
-    // Handle form submit here
+    localStorage.setItem("fullName", values.full_name);
+    localStorage.setItem("email", values.email);
+    localStorage.setItem("phoneNumber", values.phone_number);
+    localStorage.setItem("aboutMe", values.about_me);
+    //alert("Profile updated successfully!");
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik enableReinitialize initialValues={initialValues} onSubmit={handleSubmit}>
       <Form>
         <div className="mb-4">
           <label htmlFor="full_name" className="mb-2">

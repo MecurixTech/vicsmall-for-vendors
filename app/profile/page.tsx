@@ -1,8 +1,45 @@
+"use client"
 import Image from "next/image";
 import ProfileForm from "../components/profile-page/profile-form";
 import ChangePasswordForm from "../components/profile-page/change-password-form";
 
+
+import { useEffect, useState } from "react";
+
+// const Navbar = () => {
+//   const [fullName, setfullName] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     const storedfullName = localStorage.getItem("fullName");
+//     if (storedfullName) {
+//       setfullName(storedfullName);
+//     }
+//   }, []);// 
+
 const Profile = () => {
+  const [fullName, setfullName] = useState<string | null>(null);
+  const [email, setemail] = useState<string | null>(null);
+  const [phoneNumber, setphoneNumber] = useState<string | null>(null);
+
+    useEffect(() => {
+      const storedfullName = localStorage.getItem("fullName");
+      if (storedfullName) {
+        setfullName(storedfullName);
+      }
+
+      const storedemail = localStorage.getItem("email");
+      if (storedemail) {
+        setemail(storedemail);
+      }
+
+      const storedphoneNumber = localStorage.getItem("phoneNumber");
+      if (storedphoneNumber) {
+        setphoneNumber(storedphoneNumber);
+      }
+   
+    }, []);
+
+  
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">
@@ -22,26 +59,32 @@ const Profile = () => {
               className="h-12 w-12 rounded-full"
             />
             <div>
-              <p>John Doe</p>
+            <span className="hidden text-xs sm:block">
+            {fullName || "Guest"}
+          </span>
               <p className="text-xs text-gray-400">Vendor</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>COUNTRY</span>
-            <span className="text-right">Canada</span>
+            <span className="text-right">Nigeria</span>
           </div>
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>LOCATION</span>
-            <span className="text-right">19th dema street, Canada</span>
+            <span className="text-right">19th okada street, Nigeria</span>
           </div>
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>PHONE NUMBER</span>
-            <span className="text-right">+231 456 444 566</span>
+            <span className="hidden text-xs sm:block">
+            {phoneNumber || "Guest"}
+          </span>
           </div>
           <div className="flex items-center justify-between gap-4 pt-3">
             <span>EMAIL ADDRESS</span>
-            <span className="text-right">doe@gmail.com</span>
+           < span className="hidden text-xs text-right sm:block">
+            {email || "Guest"}
+          </span>
           </div>
         </div>
 

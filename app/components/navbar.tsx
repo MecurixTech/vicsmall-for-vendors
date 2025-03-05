@@ -1,8 +1,20 @@
+"use client";
+
 import { NotificationsOutlined, SearchOutlined } from "@mui/icons-material";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [fullName, setfullName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedfullName = localStorage.getItem("fullName");
+    if (storedfullName) {
+      setfullName(storedfullName);
+    }
+  }, []);
+
   return (
     <nav className="mb-8 flex items-center justify-between bg-white px-8 py-2">
       <Image
@@ -50,12 +62,14 @@ const Navbar = () => {
         >
           <Image
             src="https://utfs.io/f/wLDjZbdcJHpRMWIl9NP3i48NTabVkLgSlduGEY15BDA9eZjR"
-            alt="Favour Udoh"
+            alt="Profile Picture"
             height={32}
             width={32}
             className="h-8 w-8 rounded-full"
           />
-          <span className="hidden text-xs sm:block">Favour Udoh</span>
+          <span className="hidden text-xs sm:block">
+            {fullName || "Guest"}
+          </span>
         </Link>
       </div>
     </nav>

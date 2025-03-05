@@ -73,10 +73,6 @@ tr {
   @apply border-2 border-neutral-dark-blue text-neutral-dark-blue;
 }
 
-/*
----break---
-*/
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -132,10 +128,6 @@ tr {
     --chart-5: 340 75% 55%;
   }
 }
-
-/*
----break---
-*/
 
 @layer base {
   * {
