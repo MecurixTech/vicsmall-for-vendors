@@ -2,7 +2,7 @@ import { products } from "@/app/data/dummyData";
 import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
 import Image from "next/image";
 
-interface Product {
+interface product {
   id: number | string;
   name: string;
   description?: string;
@@ -93,7 +93,7 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
               <div>
                 <p className="text-2xl font-bold text-gray-800">275</p>
                 <p className="text-gray-500">Stock available</p>
-              </div>
+              </div>C
             </div>
           </div>
 
