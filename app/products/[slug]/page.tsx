@@ -3,10 +3,10 @@ import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons
 import Image from "next/image";
 
 interface PageProps {
-  params: { slug: string };
+  params: { slug: string }; 
 }
 
-const ProductDetailsPage = ({ params }: PageProps) => {
+const ProductDetailsPage = async ({ params }: PageProps) => {
   console.log("Params received:", params);
 
   if (!params?.slug) {
