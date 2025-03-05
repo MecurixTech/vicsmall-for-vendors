@@ -7,13 +7,15 @@ import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const [fullName, setfullName] = useState<string | null>(null);
+ 
+    useEffect(() => {
+      const storedfullName = localStorage.getItem("fullName");
+      if (storedfullName) {
+        setfullName(storedfullName);
+      }
 
-  useEffect(() => {
-    const storedfullName = localStorage.getItem("fullName");
-    if (storedfullName) {
-      setfullName(storedfullName);
-    }
-  }, []);
+   
+    }, []);
 
   return (
     <nav className="mb-8 flex items-center justify-between bg-white px-8 py-2">

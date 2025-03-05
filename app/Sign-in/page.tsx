@@ -32,7 +32,7 @@ export default function SignIn() {
 
     try {
       const res = await fetch(
-        "https://vicsmall-backend.onrender.com/v1/api/auth/login-vendor/",
+        "https://vicsmall-backend.onrender.com/v1/api/auth/login-vendor",
         {
           method: "POST",
           headers: {

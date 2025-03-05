@@ -24,7 +24,7 @@ export default function Signup() {
     setLoading(true)
 
     try {
-      const res = await fetch("https://vicsmall-backend.onrender.com/v1/api/auth/create-vendor/", {
+      const res = await fetch("https://vicsmall-backend.onrender.com/v1/api/auth/create-vendor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
