@@ -3,7 +3,7 @@ import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons
 import Image from "next/image";
 
 interface PageProps {
-  params: { slug: string } | Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 const ProductDetailsPage = ({ params }: PageProps) => {
@@ -23,10 +23,10 @@ const ProductDetailsPage = ({ params }: PageProps) => {
 
   return (
     <>
-      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">product details</h1>
+      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product Details</h1>
 
       <div className="flex flex-wrap items-start gap-4">
-        {/* product Image Section */}
+        {/* Product Image Section */}
         <div className="flex-1">
           <div className="mb-4 rounded-xl bg-white p-8 shadow-sm">
             <Image src={productImages[0]} alt={product.name} height={96} width={96} className="w-full" />
@@ -37,10 +37,9 @@ const ProductDetailsPage = ({ params }: PageProps) => {
             </div>
           </div>
           <div className="rounded-xl bg-white p-8 text-sm shadow-sm">
-            <h3 className="mb-2 text-base font-medium text-gray-800">product FULL DESCRIPTION</h3>
+            <h3 className="mb-2 text-base font-medium text-gray-800">Product Full Description</h3>
             <p className="mb-1">
-              Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
-              comfort.
+              Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with comfort.
             </p>
             <p className="mb-1">
               Sophisticated Design: Featuring a chic cut and vibrant colors that flatter every body type, this bikini
@@ -53,12 +52,12 @@ const ProductDetailsPage = ({ params }: PageProps) => {
           </div>
         </div>
 
-        {/* product Details Section */}
+        {/* Product Details Section */}
         <div className="flex-[2]">
           <div className="mb-4 flex items-start justify-between">
             <div>
               <h2 className="text-2xl">{product.name}</h2>
-              <p className="text-sm">product ID: VIC2345</p>
+              <p className="text-sm">Product ID: {product.id}</p>
             </div>
 
             <button className="flex items-center gap-1 rounded-xl bg-accent-900 px-4 py-2 text-white">
@@ -67,7 +66,7 @@ const ProductDetailsPage = ({ params }: PageProps) => {
             </button>
           </div>
 
-          <h3 className="mb-1 text-base font-medium text-gray-800">product SHORT DESCRIPTION</h3>
+          <h3 className="mb-1 text-base font-medium text-gray-800">Product Short Description</h3>
           <p className="mb-4 text-sm">
             Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
             comfort. Featuring a chic cut and vibrant colors that flatter every body type, this bikini blends boldness
@@ -79,14 +78,14 @@ const ProductDetailsPage = ({ params }: PageProps) => {
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
               <LocalOfferOutlined fontSize="large" className="text-accent-900" />
               <div>
-                <p className="text-2xl font-bold text-gray-800">$100</p>
+                <p className="text-2xl font-bold text-gray-800">${product.price}</p>
                 <p className="text-gray-500">Price</p>
               </div>
             </div>
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
               <Inventory2Outlined fontSize="large" className="text-accent-900" />
               <div>
-                <p className="text-2xl font-bold text-gray-800">275</p>
+                <p className="text-2xl font-bold text-gray-800">{product.stock}</p>
                 <p className="text-gray-500">Stock available</p>
               </div>
             </div>
@@ -117,14 +116,16 @@ const ProductDetailsPage = ({ params }: PageProps) => {
           {/* Additional Information */}
           <p className="font-medium text-gray-800">Additional information</p>
           <table className="text-sm">
-            {["SHIPPING CLASS", "SHIPPING DETAILS", "STATUS", "TAGS", "WEIGHT", "WIDTH", "LENGTH", "HEIGHT"].map(
-              (info) => (
-                <tr key={info}>
-                  <td>{info}</td>
-                  <td></td>
-                </tr>
-              )
-            )}
+            <tbody>
+              {["SHIPPING CLASS", "SHIPPING DETAILS", "STATUS", "TAGS", "WEIGHT", "WIDTH", "LENGTH", "HEIGHT"].map(
+                (info) => (
+                  <tr key={info}>
+                    <td>{info}</td>
+                    <td></td>
+                  </tr>
+                )
+              )}
+            </tbody>
           </table>
         </div>
       </div>
