@@ -17,7 +17,7 @@ export default function Signup() {
   const [error, setError] = useState<string | null>(null)
 
   const router = useRouter();
-
+//async
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)

@@ -22,7 +22,7 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
 
   if (!product) {
     return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>;
-  
+  }
 
   const productImages = Array(5).fill("https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP");
 
@@ -137,4 +137,4 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
   );
 };
 
-export default productDetailsPage;
+export default ProductDetailsPage;
