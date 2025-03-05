@@ -19,8 +19,6 @@ const ProductDetailsPage = ({ params }: PageProps) => {
     return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>;
   }
 
-  const productImages = Array(5).fill("https://utfs.io/f/wLDjZbdcJHpRZf4TaQuIU7aODg2yt0HSxWFBNfqTKvI59cYP");
-
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product Details</h1>
