@@ -7,19 +7,20 @@ import {
 import Image from "next/image";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 const ProductDetailsPage = async ({ params }: PageProps) => {
-  console.log("Params received:", params);
+  const resolvedParams = await params;
+  console.log("Params received:", resolvedParams);
 
-  if (!params?.slug) {
+  if (!resolvedParams?.slug) {
     return (
       <h1 className="text-3xl font-bold text-gray-800">Invalid product!</h1>
     );
   }
 
-  const product = products.find((p) => p.id.toString() === params.slug);
+  const product = products.find((p) => p.id.toString() === resolvedParams.slug);
 
   if (!product) {
     return (
