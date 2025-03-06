@@ -1,51 +1,79 @@
 import { products } from "@/app/data/dummyData";
-import { EditOutlined, Inventory2Outlined, LocalOfferOutlined } from "@mui/icons-material";
+import {
+  EditOutlined,
+  Inventory2Outlined,
+  LocalOfferOutlined,
+} from "@mui/icons-material";
 import Image from "next/image";
 
 interface PageProps {
-  params: { slug: string }; 
+  params: { slug: string };
 }
 
 const ProductDetailsPage = async ({ params }: PageProps) => {
   console.log("Params received:", params);
 
   if (!params?.slug) {
-    return <h1 className="text-3xl font-bold text-gray-800">Invalid product!</h1>;
+    return (
+      <h1 className="text-3xl font-bold text-gray-800">Invalid product!</h1>
+    );
   }
 
   const product = products.find((p) => p.id.toString() === params.slug);
 
   if (!product) {
-    return <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>;
+    return (
+      <h1 className="text-3xl font-bold text-gray-800">Product not found!</h1>
+    );
   }
 
   return (
     <>
-      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">Product Details</h1>
+      <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">
+        Product Details
+      </h1>
 
       <div className="flex flex-wrap items-start gap-4">
         {/* Product Image Section */}
         <div className="flex-1">
           <div className="mb-4 rounded-xl bg-white p-8 shadow-sm">
-            <Image src={productImages[0]} alt={product.name} height={96} width={96} className="w-full" />
+            <Image
+              src={product.imgSrc}
+              alt={product.name}
+              height={96}
+              width={96}
+              className="w-full"
+            />
             <div className="mx-auto flex gap-2">
-              {productImages.map((image, index) => (
-                <Image key={index} src={image} alt={product.name} height={96} width={96} className="w-full" />
+              {product.images.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image.imgSrc}
+                  alt={product.name}
+                  height={96}
+                  width={96}
+                  className="w-full"
+                />
               ))}
             </div>
           </div>
           <div className="rounded-xl bg-white p-8 text-sm shadow-sm">
-            <h3 className="mb-2 text-base font-medium text-gray-800">Product Full Description</h3>
+            <h3 className="mb-2 text-base font-medium text-gray-800">
+              Product Full Description
+            </h3>
             <p className="mb-1">
-              Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with comfort.
+              Turn heads at the beach or poolside with this stunning Fancy
+              Bikini, designed to combine elegance with comfort.
             </p>
             <p className="mb-1">
-              Sophisticated Design: Featuring a chic cut and vibrant colors that flatter every body type, this bikini
-              offers a blend of boldness and grace.
+              Sophisticated Design: Featuring a chic cut and vibrant colors that
+              flatter every body type, this bikini offers a blend of boldness
+              and grace.
             </p>
             <p>
-              Premium Fabric: Made from high-quality, quick-drying materials, it provides a silky-smooth feel while
-              ensuring durability and breathability.
+              Premium Fabric: Made from high-quality, quick-drying materials, it
+              provides a silky-smooth feel while ensuring durability and
+              breathability.
             </p>
           </div>
         </div>
@@ -64,26 +92,40 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
             </button>
           </div>
 
-          <h3 className="mb-1 text-base font-medium text-gray-800">Product Short Description</h3>
+          <h3 className="mb-1 text-base font-medium text-gray-800">
+            Product Short Description
+          </h3>
           <p className="mb-4 text-sm">
-            Turn heads at the beach or poolside with this stunning Fancy Bikini, designed to combine elegance with
-            comfort. Featuring a chic cut and vibrant colors that flatter every body type, this bikini blends boldness
-            and grace. Made from high-quality, quick-drying materials, it provides a silky-smooth feel while ensuring
-            durability and breathability.
+            Turn heads at the beach or poolside with this stunning Fancy Bikini,
+            designed to combine elegance with comfort. Featuring a chic cut and
+            vibrant colors that flatter every body type, this bikini blends
+            boldness and grace. Made from high-quality, quick-drying materials,
+            it provides a silky-smooth feel while ensuring durability and
+            breathability.
           </p>
 
           <div className="mb-8 flex gap-4">
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
-              <LocalOfferOutlined fontSize="large" className="text-accent-900" />
+              <LocalOfferOutlined
+                fontSize="large"
+                className="text-accent-900"
+              />
               <div>
-                <p className="text-2xl font-bold text-gray-800">${product.price}</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  ${product.price}
+                </p>
                 <p className="text-gray-500">Price</p>
               </div>
             </div>
             <div className="flex w-48 items-center gap-2 rounded-xl bg-white p-4">
-              <Inventory2Outlined fontSize="large" className="text-accent-900" />
+              <Inventory2Outlined
+                fontSize="large"
+                className="text-accent-900"
+              />
               <div>
-                <p className="text-2xl font-bold text-gray-800">{product.stock}</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {product.stock}
+                </p>
                 <p className="text-gray-500">Stock available</p>
               </div>
             </div>
@@ -105,7 +147,10 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
               <p className="font-medium text-gray-800">COLOR</p>
               <div className="flex flex-wrap gap-2">
                 {["red", "green", "blue"].map((color) => (
-                  <button key={color} className={`h-10 w-16 rounded-xl bg-${color}-500`} />
+                  <button
+                    key={color}
+                    className={`h-10 w-16 rounded-xl bg-${color}-500`}
+                  />
                 ))}
               </div>
             </div>
@@ -115,14 +160,21 @@ const ProductDetailsPage = async ({ params }: PageProps) => {
           <p className="font-medium text-gray-800">Additional information</p>
           <table className="text-sm">
             <tbody>
-              {["SHIPPING CLASS", "SHIPPING DETAILS", "STATUS", "TAGS", "WEIGHT", "WIDTH", "LENGTH", "HEIGHT"].map(
-                (info) => (
-                  <tr key={info}>
-                    <td>{info}</td>
-                    <td></td>
-                  </tr>
-                )
-              )}
+              {[
+                "SHIPPING CLASS",
+                "SHIPPING DETAILS",
+                "STATUS",
+                "TAGS",
+                "WEIGHT",
+                "WIDTH",
+                "LENGTH",
+                "HEIGHT",
+              ].map((info) => (
+                <tr key={info}>
+                  <td>{info}</td>
+                  <td></td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
