@@ -7,7 +7,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Upload, ChevronDown } from "lucide-react"
 
@@ -24,6 +24,15 @@ export default function CreateProductPage() {
     abroad: false,
     local: false,
   })
+  const [productName, setProductName] = useState("")
+  const [productDescription, setProductDescription] = useState("")
+  const [category, setCategory] = useState("")
+  const [productTags, setProductTags] = useState("")
+  const [productSalePrice, setProductSalePrice] = useState("")
+  const [productRegularPrice, setProductRegularPrice] = useState("")
+  const [productVisibility, setProductVisibility] = useState(true)
+  const [productStatus, setProductStatus] = useState(true)
+  const [productVariant, setProductVariant] = useState("")
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -41,19 +50,48 @@ export default function CreateProductPage() {
     setProductType((prev) => ({ ...prev, [key]: !prev[key] }))
   }
 
+  const handleSubmit = async () => {
+    const requestBody = {
+      product_name: productName,
+      product_description: productDescription,
+      category: category,
+      product_tags: productTags,
+      product_sale_price: productSalePrice,
+      product_regular_price: productRegularPrice,
+      product_visibility: productVisibility,
+      product_status: productStatus,
+      product_variant: productVariant,
+    }
+
+    try {
+      const response = await fetch("https://vicsmall-backend.onrender.com/v1/api/shop/create-product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      })
+
+      if (response.ok) {
+        // Handle successful response
+        console.log("Product created successfully")
+      } else {
+        // Handle error response
+        console.error("Failed to create product")
+      }
+    } catch (error) {
+      console.error("Error:", error)
+    }
+  }
+
   return (
     <div className="bg-[#F9F7F7] min-h-screen pb-16 px-4 md:px-6">
-
       <div className="max-w-7xl mx-auto">
         <h1 className="mb-4 py-4 hidden text-3xl font-bold text-gray-800 md:block">Create Product</h1>
-
         <div className="flex flex-col lg:flex-row gap-8">
-
           <div className="w-full lg:w-1/2">
-
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Description</h2>
-
               <div className="mb-6">
                 <label className="block mb-1 text-base">
                   Product Name <span className="text-red-500">*</span>
@@ -61,9 +99,10 @@ export default function CreateProductPage() {
                 <Input
                   className="w-full h-[38px] border border-[#D9D9D9] rounded-md bg-white"
                   placeholder="Enter product name"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
                 />
               </div>
-
               <div>
                 <label className="block mb-1 text-base">
                   Full Product Description <span className="text-red-500">*</span>
@@ -71,35 +110,36 @@ export default function CreateProductPage() {
                 <Textarea
                   className="w-full h-[136px] border border-[#D9D9D9] rounded-[10px] bg-white"
                   placeholder="Enter full product description"
+                  value={productDescription}
+                  onChange={(e) => setProductDescription(e.target.value)}
                 />
               </div>
             </div>
-
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Categories</h2>
-
               <div>
                 <label className="block mb-1 text-base">
                   Category <span className="text-red-500">*</span>
                 </label>
-                <Select>
+                <Select onValueChange={(value) => setCategory(value)}>
                   <SelectTrigger className="w-full h-[43px] border border-[#D9D9D9] rounded-md bg-white">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="clothing">Clothing</SelectItem>
-                    <SelectItem value="electronics">Electronics</SelectItem>
-                    <SelectItem value="home">Home & Garden</SelectItem>
-                    <SelectItem value="beauty">Beauty</SelectItem>
+                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Clothing</SelectItem>
+                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Electronics</SelectItem>
+                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Home & Garden</SelectItem>
+                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Beauty</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="mt-6">
                 <label className="block mb-1 text-base">Product Tags</label>
                 <Input
                   className="w-full h-[49px] border border-[#D9D9D9] rounded-[10px] bg-white"
                   placeholder="Enter product tags separated by commas"
+                  value={productTags}
+                  onChange={(e) => setProductTags(e.target.value)}
                 />
               </div>
             </div>
@@ -144,7 +184,6 @@ export default function CreateProductPage() {
                 />
               </div>
             </div>
-
             <div className="mb-8 flex flex-col md:flex-row gap-4">
               <div>
                 <label className="block mb-1 text-base">
@@ -192,7 +231,6 @@ export default function CreateProductPage() {
                   </SelectContent>
                 </Select>
               </div>
-
               <div>
                 <label className="block mb-1 text-base invisible md:visible">.</label>
                 <Select>
@@ -230,12 +268,10 @@ export default function CreateProductPage() {
           </div>
           <div className="w-full lg:w-1/2">
             <h2 className="text-xl font-semibold mb-4">Product Gallery</h2>
-
             <div className="border border-[#D9D9D9] rounded-[20px] p-4 bg-white mb-8">
               <div className="w-full h-[272px] bg-[#F5F5F5] rounded-[20px] flex flex-col items-center justify-center mb-6">
                 <Upload className="w-[50px] h-[50px] mb-4" />
                 <p className="text-center text-base">Drop or Click to upload image</p>
-                
                 <input
                   type="file"
                   accept="image/*"
@@ -252,7 +288,6 @@ export default function CreateProductPage() {
                   Upload Images
                 </Button>
               </div>
-
               <div className="flex flex-wrap gap-4 justify-center">
                 {productImages.length > 0 ? (
                   productImages.slice(0, 4).map((img, index) => (
@@ -276,7 +311,6 @@ export default function CreateProductPage() {
                 )}
               </div>
             </div>
-
             <div className="mb-8">
               <div className="flex flex-col md:flex-row gap-8">
                 <div>
@@ -287,35 +321,34 @@ export default function CreateProductPage() {
                     className="w-full md:w-[202px] h-[48px] border border-[#D9D9D9] rounded-md bg-white"
                     placeholder="0.00"
                     type="number"
+                    value={productRegularPrice}
+                    onChange={(e) => setProductRegularPrice(e.target.value)}
                   />
                 </div>
-
                 <div>
                   <label className="block mb-1 text-base">Sales Price</label>
                   <Input
                     className="w-full md:w-[202px] h-[48px] border border-[#D9D9D9] rounded-md bg-white"
                     placeholder="0.00"
                     type="number"
+                    value={productSalePrice}
+                    onChange={(e) => setProductSalePrice(e.target.value)}
                   />
                 </div>
               </div>
             </div>
-
             <div>
               <h2 className="text-xl font-semibold mb-4">Publish</h2>
-
               <div className="flex flex-col md:flex-row gap-6 mb-8">
                 <div className="w-full md:w-[223px] h-[63px] border border-[#D9D9D9] rounded-[10px] bg-white flex items-center justify-between px-4">
                   <span>Status</span>
                   <ChevronDown className="w-5 h-5 text-gray-400 rotate-90" />
                 </div>
-
                 <div className="w-full md:w-[248px] h-[63px] border border-[#D9D9D9] rounded-[10px] bg-white flex items-center justify-between px-4">
                   <span>Visibility</span>
                   <ChevronDown className="w-5 h-5 text-gray-400 rotate-90" />
                 </div>
               </div>
-
               <div className="flex flex-col sm:flex-row gap-6 justify-end">
                 <Button
                   variant="outline"
@@ -323,8 +356,10 @@ export default function CreateProductPage() {
                 >
                   Cancel
                 </Button>
-
-                <Button className="w-full sm:w-[168px] h-[62px] rounded-[10px] bg-[#FF8C48] hover:bg-[#e67e3e] text-white">
+                <Button
+                  className="w-full sm:w-[168px] h-[62px] rounded-[10px] bg-[#FF8C48] hover:bg-[#e67e3e] text-white"
+                  onClick={handleSubmit}
+                >
                   Publish
                 </Button>
               </div>
@@ -335,4 +370,3 @@ export default function CreateProductPage() {
     </div>
   )
 }
-
