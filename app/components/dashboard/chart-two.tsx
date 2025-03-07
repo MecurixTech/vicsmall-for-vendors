@@ -18,22 +18,10 @@ const chartData = [
 const COLORS = ["#FF4D4D", "#1A1A66", "#2E8B57", "#FFA500"];
 
 const chartConfig = {
-  clothing: {
-    label: "Clothing",
-    color: "#FF4D4D",
-  },
-  lingerie: {
-    label: "Lingerie",
-    color: "#1A1A66",
-  },
-  footwear: {
-    label: "Footwear",
-    color: "#2E8B57",
-  },
-  accessories: {
-    label: "Accessories",
-    color: "#FFA500",
-  },
+  clothing: { label: "Clothing", color: "#FF4D4D" },
+  lingerie: { label: "Lingerie", color: "#1A1A66" },
+  footwear: { label: "Footwear", color: "#2E8B57" },
+  accessories: { label: "Accessories", color: "#FFA500" },
 } satisfies ChartConfig;
 
 interface CustomLabelProps {
@@ -47,7 +35,10 @@ const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
     <div className="flex items-center gap-3">
       <div
         className="h-2 w-2 flex-shrink-0 rounded-full"
-style={{ backgroundColor: chartConfig[name.toLowerCase() as keyof typeof chartConfig].color }}
+        style={{
+          backgroundColor:
+            chartConfig[name.toLowerCase() as keyof typeof chartConfig].color,
+        }}
       />
       <div className="flex flex-col">
         <span className="font-medium">{name}</span>
@@ -58,14 +49,15 @@ style={{ backgroundColor: chartConfig[name.toLowerCase() as keyof typeof chartCo
   </div>
 );
 
-
 export function Component() {
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="text-xl font-semibold">Sales Category</CardTitle>
+    <Card className="w-full p-4">
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+        <CardTitle className="text-lg sm:text-xl font-semibold">
+          Sales Category
+        </CardTitle>
         <select className="rounded-md border border-gray-200 px-3 py-1 text-sm outline-none">
           <option value="week">Week</option>
           <option value="month">Month</option>
@@ -73,38 +65,35 @@ export function Component() {
         </select>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-[1.2fr,1fr] gap-8">
+        <div className="flex flex-col items-center gap-6 sm:grid sm:grid-cols-[1.2fr,1fr] sm:gap-8">
           <ChartContainer
             config={chartConfig}
-            className="relative mx-auto w-full max-w-[240px]"
+            className="relative w-full max-w-[200px] sm:max-w-[240px]"
           >
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-2xl font-bold">${total}</div>
+                <div className="text-xl sm:text-2xl font-bold">${total}</div>
               </div>
             </div>
-            <PieChart width={240} height={240}>
+            <PieChart width={200} height={200} className="sm:w-[240px] sm:h-[240px]">
               <Pie
                 data={chartData}
                 dataKey="value"
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                innerRadius={60}
-                outerRadius={85}
+                innerRadius={50}
+                outerRadius={80}
                 paddingAngle={4}
               >
                 {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip content={<ChartTooltipContent />} />
             </PieChart>
           </ChartContainer>
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col w-full px-4 sm:px-0">
             {chartData.map((item) => (
               <CustomLabel key={item.name} {...item} />
             ))}

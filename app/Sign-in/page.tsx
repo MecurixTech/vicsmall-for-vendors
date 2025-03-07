@@ -20,16 +20,16 @@ export default function SignIn() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
+  
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-
+  
     if (!trimmedEmail || !trimmedPassword) {
       setError("Email and password are required.");
       setLoading(false);
       return;
     }
-
+  
     try {
       const res = await fetch(
         "https://vicsmall-backend.onrender.com/v1/api/auth/login-vendor",
@@ -45,20 +45,22 @@ export default function SignIn() {
           }),
         },
       );
-
+  
       const data = await res.json();
       console.log("Response Status:", res.status);
       console.log("Response Data:", data);
-
+  
       if (!res.ok) {
         throw new Error(
           data.message || `Login failed with status ${res.status}`,
         );
       }
-
+  
       localStorage.setItem("token", data.token);
+      console.log("Token stored:", data.token); // Log the token for debugging
+  
       localStorage.setItem("username", data.fullName);
-
+  
       // alert("Login successful!");
       router.push("/");
     } catch (error) {
@@ -70,7 +72,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md space-y-8 p-4">
+    <div className="mx-auto w-full max-w-md space-y-8 p-4 pt-48 lg:pt-36">
       <div className="space-y-2 text-center">
         <h1 className="text-2xl font-semibold">
           Welcome back! <span className="text-purple-700">VICSMALL</span>

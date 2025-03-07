@@ -41,7 +41,7 @@ export const sidebarLinks = [
   {
     id: 5,
     label: "Logout",
-    href: "/logout",
+    href: "/Sign-in",
     icon: LogoutOutlined,
   },
 ];

@@ -15,8 +15,8 @@ const data = [
 
 export function MiniChart() {
   return (
-    <div style={{ width: "120px", height: "60px" }}>
-      <ResponsiveContainer>
+    <div className="w-full max-w-[150px] h-[70px] sm:max-w-[200px] sm:h-[80px]">
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <Line
             type="monotone"

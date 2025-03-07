@@ -73,7 +73,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-md p-4">
+    <div className="mx-auto w-full max-w-md p-4 pt-60 lg:pt-36">
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-semibold">
           Sign up! <span className="text-purple-700">Vendor</span>

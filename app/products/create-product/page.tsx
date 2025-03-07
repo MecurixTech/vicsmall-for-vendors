@@ -33,6 +33,7 @@ export default function CreateProductPage() {
   const [productVisibility, setProductVisibility] = useState(true)
   const [productStatus, setProductStatus] = useState(true)
   const [productVariant, setProductVariant] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -51,6 +52,7 @@ export default function CreateProductPage() {
   }
 
   const handleSubmit = async () => {
+    setIsSubmitting(true)
     const requestBody = {
       product_name: productName,
       product_description: productDescription,
@@ -62,25 +64,34 @@ export default function CreateProductPage() {
       product_status: productStatus,
       product_variant: productVariant,
     }
-
+  
     try {
+      const token = localStorage.getItem("token") 
+      if (!token) {
+        throw new Error("No authentication token found")
+      }
+  
       const response = await fetch("https://vicsmall-backend.onrender.com/v1/api/shop/create-product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(requestBody),
       })
-
+  
       if (response.ok) {
-        // Handle successful response
+       
         console.log("Product created successfully")
       } else {
-        // Handle error response
-        console.error("Failed to create product")
+      
+        const errorData = await response.json()
+        console.error("Failed to create product", errorData)
       }
     } catch (error) {
       console.error("Error:", error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -359,8 +370,9 @@ export default function CreateProductPage() {
                 <Button
                   className="w-full sm:w-[168px] h-[62px] rounded-[10px] bg-[#FF8C48] hover:bg-[#e67e3e] text-white"
                   onClick={handleSubmit}
+                  disabled={isSubmitting}
                 >
-                  Publish
+                  {isSubmitting ? "Publishing..." : "Publish"}
                 </Button>
               </div>
             </div>
