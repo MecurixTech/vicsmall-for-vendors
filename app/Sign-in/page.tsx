@@ -43,7 +43,7 @@ export default function SignIn() {
             email: trimmedEmail,
             password: trimmedPassword,
           }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -51,25 +51,27 @@ export default function SignIn() {
       console.log("Response Data:", data);
 
       if (!res.ok) {
-        throw new Error(data.message || `Login failed with status ${res.status}`);
+        throw new Error(
+          data.message || `Login failed with status ${res.status}`,
+        );
       }
 
-           localStorage.setItem("token", data.token);
-           localStorage.setItem("username", data.fullName);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.fullName);
 
-       // alert("Login successful!");
+      // alert("Login successful!");
       router.push("/");
-   
-    } catch (err:  unknown) {
-      setError(err.message);
+    } catch (error) {
+      console.log(error);
+      setError("An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-8 p-4">
-      <div className="text-center space-y-2">
+    <div className="mx-auto w-full max-w-md space-y-8 p-4">
+      <div className="space-y-2 text-center">
         <h1 className="text-2xl font-semibold">
           Welcome back! <span className="text-purple-700">VICSMALL</span>
         </h1>
@@ -126,7 +128,7 @@ export default function SignIn() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 inset-y-0 my-auto flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-3 my-auto flex items-center text-gray-400 hover:text-gray-600"
               >
                 {showPassword ? (
                   <VisibilityOff className="h-5 w-5" />
@@ -135,7 +137,7 @@ export default function SignIn() {
                 )}
               </button>
             </div>
-            <div className="flex justify-end mt-1">
+            <div className="mt-1 flex justify-end">
               <Link
                 href="/recover/RecoverPassword"
                 className="text-sm text-gray-600 hover:text-gray-900"
@@ -146,11 +148,11 @@ export default function SignIn() {
           </div>
         </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
         <Button
           type="submit"
-          className="w-full bg-[#F37F34] hover:bg-[#F37F34]/90 text-white"
+          className="w-full bg-[#F37F34] text-white hover:bg-[#F37F34]/90"
           size="lg"
           disabled={loading}
         >
@@ -167,8 +169,11 @@ export default function SignIn() {
         </div>
 
         <div className="flex justify-center gap-4">
-          <button type="button" className="p-2 border rounded-lg hover:bg-gray-50">
-            <svg className="w-6 h-6">
+          <button
+            type="button"
+            className="rounded-lg border p-2 hover:bg-gray-50"
+          >
+            <svg className="h-6 w-6">
               <image
                 href="https://www.svgrepo.com/show/475656/google-color.svg"
                 width="100%"
@@ -177,8 +182,11 @@ export default function SignIn() {
             </svg>
           </button>
 
-          <button type="button" className="p-2 border rounded-lg hover:bg-gray-50">
-            <svg className="w-6 h-6">
+          <button
+            type="button"
+            className="rounded-lg border p-2 hover:bg-gray-50"
+          >
+            <svg className="h-6 w-6">
               <image
                 href="https://www.svgrepo.com/show/475647/facebook-color.svg"
                 width="100%"
@@ -190,7 +198,10 @@ export default function SignIn() {
 
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link href="/Sign-Up" className="text-purple-700 hover:text-purple-800">
+          <Link
+            href="/Sign-Up"
+            className="text-purple-700 hover:text-purple-800"
+          >
             Sign up as a Vendor
           </Link>
         </p>

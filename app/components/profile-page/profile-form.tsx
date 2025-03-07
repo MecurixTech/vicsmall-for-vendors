@@ -3,6 +3,13 @@
 import { Formik, Form, Field } from "formik";
 import { useEffect, useState } from "react";
 
+type ProfileData = {
+  full_name: string;
+  email: string;
+  phone_number: string;
+  about_me: string;
+};
+
 const ProfileForm = () => {
   const [initialValues, setInitialValues] = useState({
     full_name: "",
@@ -16,11 +23,13 @@ const ProfileForm = () => {
       full_name: localStorage.getItem("fullName") || "",
       email: localStorage.getItem("email") || "",
       phone_number: localStorage.getItem("phoneNumber") || "",
-      about_me: localStorage.getItem("aboutMe") || "This is some information about John Doe",
+      about_me:
+        localStorage.getItem("aboutMe") ||
+        "This is some information about John Doe",
     });
   }, []);
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values: ProfileData) => {
     console.log(values);
     localStorage.setItem("fullName", values.full_name);
     localStorage.setItem("email", values.email);
@@ -30,7 +39,11 @@ const ProfileForm = () => {
   };
 
   return (
-    <Formik enableReinitialize initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik
+      enableReinitialize
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+    >
       <Form>
         <div className="mb-4">
           <label htmlFor="full_name" className="mb-2">
