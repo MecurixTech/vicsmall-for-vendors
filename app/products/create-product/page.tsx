@@ -72,7 +72,7 @@ export default function CreateProductPage() {
       if (!token) {
         throw new Error("No authentication token found");
       }
-
+//no window
       const response = await fetch("https://vicsmall-backend.onrender.com/v1/api/shop/create-product", {
         method: "POST",
         headers: {
