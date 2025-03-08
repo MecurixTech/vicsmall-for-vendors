@@ -1,58 +1,55 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Upload, ChevronDown } from "lucide-react"
+import type React from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Upload, ChevronDown } from "lucide-react";
 
 export default function CreateProductPage() {
-  const [productImages, setProductImages] = useState<string[]>([])
-  // const [selectedSizes, setSelectedSizes] = useState<string[]>([])
-  // const [selectedColors, setSelectedColors] = useState<string[]>(["#FF0000", "#00FF00", "#0000FF"])
+  const [productImages, setProductImages] = useState<string[]>([]);
   const [shippingClasses, setShippingClasses] = useState({
     footwear: false,
     appliances: false,
     accessories: false,
-  })
+  });
   const [productType, setProductType] = useState({
     abroad: false,
     local: false,
-  })
-  const [productName, setProductName] = useState("")
-  const [productDescription, setProductDescription] = useState("")
-  const [category, setCategory] = useState("")
-  const [productTags, setProductTags] = useState("")
-  const [productSalePrice, setProductSalePrice] = useState("")
-  const [productRegularPrice, setProductRegularPrice] = useState("")
-  const [productVisibility] = useState(true)
-  const [productStatus] = useState(true)
-  const [productVariant] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [productName, setProductName] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [productTags, setProductTags] = useState("");
+  const [productSalePrice, setProductSalePrice] = useState("");
+  const [productRegularPrice, setProductRegularPrice] = useState("");
+  const [productVisibility] = useState(true);
+  const [productStatus] = useState(true);
+  const [productVariant] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
+    const files = e.target.files;
     if (files) {
-      const newImages = Array.from(files).map((file) => URL.createObjectURL(file))
-      setProductImages([...productImages, ...newImages])
+      const newImages = Array.from(files).map((file) => URL.createObjectURL(file));
+      setProductImages([...productImages, ...newImages]);
     }
-  }
+  };
 
   const toggleShippingClass = (key: keyof typeof shippingClasses) => {
-    setShippingClasses((prev) => ({ ...prev, [key]: !prev[key] }))
-  }
+    setShippingClasses((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const toggleProductType = (key: keyof typeof productType) => {
-    setProductType((prev) => ({ ...prev, [key]: !prev[key] }))
-  }
+    setProductType((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const handleSubmit = async () => {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     const requestBody = {
       product_name: productName,
       product_description: productDescription,
@@ -63,14 +60,14 @@ export default function CreateProductPage() {
       product_visibility: productVisibility,
       product_status: productStatus,
       product_variant: productVariant,
-    }
-  
+    };
+
     try {
-      const token = localStorage.getItem("token") 
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (!token) {
-        throw new Error("No authentication token found")
+        throw new Error("No authentication token found");
       }
-  
+
       const response = await fetch("https://vicsmall-backend.onrender.com/v1/api/shop/create-product", {
         method: "POST",
         headers: {
@@ -78,22 +75,20 @@ export default function CreateProductPage() {
           "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(requestBody),
-      })
-  
+      });
+
       if (response.ok) {
-       
-        console.log("Product created successfully")
+        console.log("Product created successfully");
       } else {
-      
-        const errorData = await response.json()
-        console.error("Failed to create product", errorData)
+        const errorData = await response.json();
+        console.error("Failed to create product", errorData);
       }
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error:", error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="bg-[#F9F7F7] min-h-screen pb-16 px-4 md:px-6">
@@ -380,5 +375,5 @@ export default function CreateProductPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
