@@ -23,13 +23,13 @@ const Products = () => {
         Products
       </h1>
 
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col items-start gap-4 md:flex-row">
         {isShowingFilters && <Filters />}
 
-        <div className="flex-[5]">
-          <div className="flex items-center justify-between gap-8">
-            <div className="flex flex-1 items-center gap-2">
-              <div className="relative flex-1">
+        <div className="flex-[5] w-full">
+          <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-8">
+            <div className="flex w-full items-center gap-2 md:flex-1">
+              <div className="relative w-full">
                 <input
                   type="text"
                   placeholder="Search reviews"
@@ -47,7 +47,7 @@ const Products = () => {
               </button>
             </div>
 
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 md:gap-8">
               <div className="flex items-center">
                 <button
                   onClick={() => setIsInListView(true)}
@@ -71,7 +71,7 @@ const Products = () => {
             </div>
           </div>
 
-          <div className="my-4 flex items-center gap-4 text-sm">
+          <div className="my-4 flex flex-wrap items-center gap-2 text-xs md:gap-4 md:text-sm">
             <button className="font-medium text-accent-900">
               ALL PRODUCTS [100]
             </button>
@@ -80,57 +80,59 @@ const Products = () => {
           </div>
 
           {isInListView ? (
-            <table className="w-full rounded-xl bg-white text-sm shadow-sm">
-              <thead>
-                <tr>
-                  <th>IMAGE</th>
-                  <th>PRODUCT NAME</th>
-                  <th>PRICE</th>
-                  <th>PRODUCT CATEGORIES</th>
-                  <th>STATUS</th>
-                  <th>DATE</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {products.map((product) => (
-                  <tr key={product.id}>
-                    <td>
-                      <Image
-                        src={product.imgSrc}
-                        alt={product.name}
-                        height={48}
-                        width={48}
-                        className="h-12 w-12 rounded-lg object-cover"
-                      />
-                    </td>
-                    <td>
-                      <Link
-                        href={`products/${product.id}`}
-                        className="hover:underline"
-                      >
-                        {product.name}
-                      </Link>
-                    </td>
-                    <td>{product.price}</td>
-                    <td className="capitalize">{product.category}</td>
-                    <td>
-                      <span
-                        className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
-                      >
-                        {product.status}
-                      </span>
-                    </td>
-                    <td>{product.date}</td>
-                    <td>
-                      <DeleteOutlined />
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full rounded-xl bg-white text-xs shadow-sm md:text-sm">
+                <thead>
+                  <tr>
+                    <th>IMAGE</th>
+                    <th>PRODUCT NAME</th>
+                    <th>PRICE</th>
+                    <th>PRODUCT CATEGORIES</th>
+                    <th>STATUS</th>
+                    <th>DATE</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product.id}>
+                      <td>
+                        <Image
+                          src={product.imgSrc}
+                          alt={product.name}
+                          height={48}
+                          width={48}
+                          className="h-12 w-12 rounded-lg object-cover"
+                        />
+                      </td>
+                      <td>
+                        <Link
+                          href={`products/${product.id}`}
+                          className="hover:underline"
+                        >
+                          {product.name}
+                        </Link>
+                      </td>
+                      <td>{product.price}</td>
+                      <td className="capitalize">{product.category}</td>
+                      <td>
+                        <span
+                          className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
+                        >
+                          {product.status}
+                        </span>
+                      </td>
+                      <td>{product.date}</td>
+                      <td>
+                        <DeleteOutlined />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <div className="xs:grid-cols-2 grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {products.map((product) => (
                 <Link
                   href={`products/${product.id}`}
