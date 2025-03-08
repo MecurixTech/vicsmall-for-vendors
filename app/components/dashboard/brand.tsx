@@ -52,7 +52,7 @@ export function Brand() {
     <Card className="w-full p-4">
       <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
         <CardTitle className="text-lg sm:text-xl font-semibold">
-          Sales Category
+          Brand Category
         </CardTitle>
         <select className="rounded-md border border-gray-200 px-3 py-1 text-sm outline-none">
           <option value="week">Week</option>
