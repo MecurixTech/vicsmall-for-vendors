@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis } from "recharts";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
@@ -21,13 +22,28 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Component() {
+  const [chartWidth, setChartWidth] = useState(400);
+
+  useEffect(() => {
+    const updateChartWidth = () => {
+      setChartWidth(window.innerWidth < 640 ? 300 : 400);
+    };
+
+    updateChartWidth();
+    window.addEventListener("resize", updateChartWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateChartWidth);
+    };
+  }, []);
+
   return (
     <Card className="w-full max-w-full mx-auto p-4">
       <CardContent className="pb-4">
         <div className="w-full overflow-x-auto">
           <ChartContainer config={chartConfig}>
             <LineChart
-              width={window.innerWidth < 640 ? 300 : 400} // Adjust width based on screen size
+              width={chartWidth}
               height={200}
               data={chartData}
               margin={{
