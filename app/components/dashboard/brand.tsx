@@ -2,11 +2,7 @@
 
 import { Pie, PieChart, Tooltip, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
 
 const chartData = [
   { name: "Clothing", value: 250, products: 51 },
@@ -49,14 +45,14 @@ const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
   </div>
 );
 
- export function Brand() {
+export function Brand() {
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <Card className="w-full p-4">
       <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
         <CardTitle className="text-lg sm:text-xl font-semibold">
-          Brand Category
+          Sales Category
         </CardTitle>
         <select className="rounded-md border border-gray-200 px-3 py-1 text-sm outline-none">
           <option value="week">Week</option>
@@ -70,14 +66,24 @@ const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
             config={chartConfig}
             className="relative w-full max-w-[200px] sm:max-w-[240px]"
           >
-            <div className="absolute inset-0 flex items-center justify-center">
+            {/* ✅ Centering Fix for Total Amount */}
+            <div
+              className="absolute inset-0 flex items-center justify-center w-full text-center"
+              style={{ left: "50%", transform: "translateX(-50%)" }}
+            >
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                   <div className="text-xl sm:text-2xl font-bold">${total}</div>
                 </div>
               </div>
             </div>
-            <PieChart width={200} height={200} className="sm:w-[240px] sm:h-[240px]">
+
+            {/* Pie Chart */}
+            <PieChart
+              width={200}
+              height={200}
+              className="sm:w-[240px] sm:h-[240px] mx-auto"
+            >
               <Pie
                 data={chartData}
                 dataKey="value"
@@ -95,6 +101,8 @@ const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
               <Tooltip content={<ChartTooltipContent />} />
             </PieChart>
           </ChartContainer>
+
+          {/* Labels */}
           <div className="flex flex-col w-full px-4 sm:px-0">
             {chartData.map((item) => (
               <CustomLabel key={item.name} {...item} />
@@ -105,3 +113,5 @@ const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
     </Card>
   );
 }
+
+export default Brand;
