@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,6 +31,12 @@ export default function CreateProductPage() {
   const [productStatus] = useState(true);
   const [productVariant] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -63,7 +69,6 @@ export default function CreateProductPage() {
     };
 
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
       if (!token) {
         throw new Error("No authentication token found");
       }
