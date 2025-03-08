@@ -71,8 +71,10 @@ export function Component() {
             className="relative w-full max-w-[200px] sm:max-w-[240px]"
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-xl sm:text-2xl font-bold">${total}</div>
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className="text-xl sm:text-2xl font-bold">${total}</div>
+                </div>
               </div>
             </div>
             <PieChart width={200} height={200} className="sm:w-[240px] sm:h-[240px]">

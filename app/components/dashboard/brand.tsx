@@ -49,12 +49,12 @@ const CustomLabel = ({ name, value, products }: CustomLabelProps) => (
   </div>
 );
 
-export function Brand() {
+ export function Brand() {
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0 pb-4">
+    <Card className="w-full p-4">
+      <CardHeader className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
         <CardTitle className="text-lg sm:text-xl font-semibold">
           Brand Category
         </CardTitle>
@@ -65,38 +65,37 @@ export function Brand() {
         </select>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col items-center sm:grid sm:grid-cols-[1.2fr,1fr] gap-6 sm:gap-8">
+        <div className="flex flex-col items-center gap-6 sm:grid sm:grid-cols-[1.2fr,1fr] sm:gap-8">
           <ChartContainer
             config={chartConfig}
             className="relative w-full max-w-[200px] sm:max-w-[240px]"
           >
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-2xl font-bold">${total}</div>
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className="text-xl sm:text-2xl font-bold">${total}</div>
+                </div>
               </div>
             </div>
-            <PieChart width={180} height={180} className="sm:w-[240px] sm:h-[240px]">
+            <PieChart width={200} height={200} className="sm:w-[240px] sm:h-[240px]">
               <Pie
                 data={chartData}
                 dataKey="value"
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                innerRadius={45}
-                outerRadius={75}
+                innerRadius={50}
+                outerRadius={80}
                 paddingAngle={4}
               >
                 {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip content={<ChartTooltipContent />} />
             </PieChart>
           </ChartContainer>
-          <div className="flex flex-col justify-center gap-4 w-full px-2 sm:px-0">
+          <div className="flex flex-col w-full px-4 sm:px-0">
             {chartData.map((item) => (
               <CustomLabel key={item.name} {...item} />
             ))}
