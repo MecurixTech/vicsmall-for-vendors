@@ -13,8 +13,8 @@ import { Upload, ChevronDown } from "lucide-react"
 
 export default function CreateProductPage() {
   const [productImages, setProductImages] = useState<string[]>([])
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([])
-  const [selectedColors, setSelectedColors] = useState<string[]>(["#FF0000", "#00FF00", "#0000FF"])
+  // const [selectedSizes, setSelectedSizes] = useState<string[]>([])
+  // const [selectedColors, setSelectedColors] = useState<string[]>(["#FF0000", "#00FF00", "#0000FF"])
   const [shippingClasses, setShippingClasses] = useState({
     footwear: false,
     appliances: false,
