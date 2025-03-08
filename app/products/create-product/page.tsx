@@ -30,9 +30,9 @@ export default function CreateProductPage() {
   const [productTags, setProductTags] = useState("")
   const [productSalePrice, setProductSalePrice] = useState("")
   const [productRegularPrice, setProductRegularPrice] = useState("")
-  const [productVisibility, setProductVisibility] = useState(true)
-  const [productStatus, setProductStatus] = useState(true)
-  const [productVariant, setProductVariant] = useState("")
+  const [productVisibility] = useState(true)
+  const [productStatus] = useState(true)
+  const [productVariant] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
