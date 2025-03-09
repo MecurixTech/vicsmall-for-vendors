@@ -53,12 +53,12 @@ export default function Signup() {
         throw new Error(data?.Message || "Failed to create account");
       }
 
-      // Save user's full name to local storage
+      
       localStorage.setItem("fullName", fullName.trim());
       localStorage.setItem("email", email.trim());
       localStorage.setItem("phoneNumber", phoneNumber.trim().trim());
 
-      // Optional: If your backend returns a token upon registration, store it
+      t
       if (data?.Data?.token) {
         localStorage.setItem("token", data.Data.token);
       }

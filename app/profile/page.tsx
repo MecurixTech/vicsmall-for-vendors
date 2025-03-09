@@ -20,11 +20,23 @@ const Profile = () => {
   const [fullName, setfullName] = useState<string | null>(null);
   const [email, setemail] = useState<string | null>(null);
   const [phoneNumber, setphoneNumber] = useState<string | null>(null);
+  const [country, setcountry] = useState<string | null>(null);
+  const [location, setlocation] = useState<string | null>(null);
 
     useEffect(() => {
       const storedfullName = localStorage.getItem("fullName");
       if (storedfullName) {
         setfullName(storedfullName);
+      }
+
+      const storedlocation = localStorage.getItem("location");
+      if (storedlocation) {
+        setlocation(storedlocation);
+      }
+
+      const storedcountry = localStorage.getItem("country");
+      if (storedcountry) {
+        setcountry(storedcountry);
       }
 
       const storedemail = localStorage.getItem("email");
@@ -36,7 +48,8 @@ const Profile = () => {
       if (storedphoneNumber) {
         setphoneNumber(storedphoneNumber);
       }
-   
+
+    
     }, []);
 
   
@@ -68,18 +81,25 @@ const Profile = () => {
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>COUNTRY</span>
-            <span className="text-right">Nigeria</span>
+            <span className="text-right">
+            {country || "Guest"}
+              </span>
           </div>
+
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>LOCATION</span>
-            <span className="text-right">19th okada street, Nigeria</span>
+            <span className="text-right">
+            {location || "Guest"}
+              </span>
           </div>
+
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>PHONE NUMBER</span>
             <span className="hidden text-xs sm:block">
             {phoneNumber || "Guest"}
           </span>
           </div>
+
           <div className="flex items-center justify-between gap-4 pt-3">
             <span>EMAIL ADDRESS</span>
            < span className="hidden text-xs text-right sm:block">

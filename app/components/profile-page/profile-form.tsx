@@ -7,6 +7,8 @@ type ProfileData = {
   full_name: string;
   email: string;
   phone_number: string;
+  country: string;
+  location: string;
   about_me: string;
 };
 
@@ -16,6 +18,8 @@ const ProfileForm = () => {
     email: "",
     phone_number: "",
     about_me: "",
+    country: "",
+    location: ""
   });
 
   useEffect(() => {
@@ -23,6 +27,8 @@ const ProfileForm = () => {
       full_name: localStorage.getItem("fullName") || "",
       email: localStorage.getItem("email") || "",
       phone_number: localStorage.getItem("phoneNumber") || "",
+      country: localStorage.getItem("country") || "",
+      location: localStorage.getItem("location") || "",
       about_me:
         localStorage.getItem("aboutMe") ||
         "This is some information about John Doe",
@@ -35,7 +41,9 @@ const ProfileForm = () => {
     localStorage.setItem("email", values.email);
     localStorage.setItem("phoneNumber", values.phone_number);
     localStorage.setItem("aboutMe", values.about_me);
-    //alert("Profile updated successfully!");
+    localStorage.setItem("country", values.country);
+    localStorage.setItem("location", values.location);
+    
   };
 
   return (
@@ -57,6 +65,20 @@ const ProfileForm = () => {
             Email
           </label>
           <Field type="text" name="email" className="w-full" />
+        </div>
+       
+        <div className="mb-4">
+          <label htmlFor="country" className="mb-2">
+            Country
+          </label>
+          <Field type="text" name="country" className="w-full" />
+        </div>
+       
+        <div className="mb-4">
+          <label htmlFor="location" className="mb-2">
+            Location
+          </label>
+          <Field type="text" name="location" className="w-full" />
         </div>
 
         <div className="mb-4">
