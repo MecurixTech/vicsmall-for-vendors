@@ -53,12 +53,10 @@ export default function Signup() {
         throw new Error(data?.Message || "Failed to create account");
       }
 
-      
       localStorage.setItem("fullName", fullName.trim());
       localStorage.setItem("email", email.trim());
       localStorage.setItem("phoneNumber", phoneNumber.trim().trim());
 
-      t
       if (data?.Data?.token) {
         localStorage.setItem("token", data.Data.token);
       }
