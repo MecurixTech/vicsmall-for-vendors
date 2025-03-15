@@ -17,15 +17,15 @@ export default function Signup() {
   const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
-  //async
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
+  
     try {
       const res = await fetch(
-        "https://vicsmall-backend.onrender.com/v1/api/auth/create-vendor",
+        "https://vicsmall-backend-ckn4.onrender.com/v1/api/auth/create-vendor",
         {
           method: "POST",
           headers: {
@@ -43,24 +43,28 @@ export default function Signup() {
           }),
         },
       );
-
+  
       const data = await res.json();
-
+      console.log("Response data:", data); // Log the response data
+  
       if (!res.ok) {
         if (data?.Data?.email) {
           throw new Error(data?.Data?.email[0] || "Invalid email");
         }
         throw new Error(data?.Message || "Failed to create account");
       }
-
+  
       localStorage.setItem("fullName", fullName.trim());
       localStorage.setItem("email", email.trim());
-      localStorage.setItem("phoneNumber", phoneNumber.trim().trim());
-
+      localStorage.setItem("phoneNumber", phoneNumber.trim());
+  
       if (data?.Data?.token) {
-        localStorage.setItem("token", data.Data.token);
+        localStorage.setItem("token", data.Data.access);
+        console.log("Token stored:", data.Data.access); // Log the stored token
+      } else {
+        console.error("Token not found in response");
       }
-
+  
       router.push("/Sign-in");
     } catch (error) {
       console.log(error);
@@ -69,7 +73,6 @@ export default function Signup() {
       setLoading(false);
     }
   };
-
   return (
     <div className="mx-auto w-full max-w-md p-4 pt-36 lg:pt-36">
       <div className="mb-8 text-center">

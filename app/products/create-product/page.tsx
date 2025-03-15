@@ -35,7 +35,11 @@ export default function CreateProductPage() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
+    if (storedToken) {
+          setToken(storedToken);
+    } else {
+      console.error("No token found in localStorage");
+    }
   }, []);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +56,52 @@ export default function CreateProductPage() {
 
   const toggleProductType = (key: keyof typeof productType) => {
     setProductType((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const verifyToken = async () => {
+    try {
+      const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/auth/token/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        console.log("Token is valid");
+        return true;
+      } else {
+        console.error("Token is invalid");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error verifying token:", error);
+      return false;
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/auth/token/refresh", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.newToken);
+        setToken(data.newToken);
+        console.log("Token refreshed successfully");
+      } else {
+        console.error("Failed to refresh token");
+      }
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+    }
   };
 
   const handleSubmit = async () => {
@@ -72,12 +122,18 @@ export default function CreateProductPage() {
       if (!token) {
         throw new Error("No authentication token found");
       }
-//no window
-      const response = await fetch("https://vicsmall-backend.onrender.com/v1/api/shop/create-product", {
+
+      const isTokenValid = await verifyToken();
+      if (!isTokenValid) {
+        console.error("Token expired, refreshing token...");
+        await refreshToken();
+      }
+
+      const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/create-product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(requestBody),
       });
@@ -94,7 +150,6 @@ export default function CreateProductPage() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="bg-[#F9F7F7] min-h-screen pb-16 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">

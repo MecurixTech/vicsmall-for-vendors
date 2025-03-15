@@ -32,7 +32,7 @@ export default function SignIn() {
   
     try {
       const res = await fetch(
-        "https://vicsmall-backend.onrender.com/v1/api/auth/login-vendor",
+        "https://vicsmall-backend-ckn4.onrender.com/v1/api/auth/login-vendor",
         {
           method: "POST",
           headers: {
@@ -56,12 +56,11 @@ export default function SignIn() {
         );
       }
   
-      localStorage.setItem("token", data.token);
-      console.log("Token stored:", data.token); // Log the token for debugging
+      localStorage.setItem("token", data.Data.access);
+      console.log("Token stored:", data.Data.access); 
   
       localStorage.setItem("username", data.fullName);
   
-      // alert("Login successful!");
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -70,7 +69,6 @@ export default function SignIn() {
       setLoading(false);
     }
   };
-
   return (
     <div className="mx-auto w-full max-w-md space-y-8 p-4 pt-48 lg:pt-36">
       <div className="space-y-2 text-center">
