@@ -28,7 +28,7 @@ const ChangePasswordForm = () => {
       }
 
       const response = await fetch(
-        "https://vicsmall-backend.onrender.com/v1/api/auth/password-reset/",
+        "https://vicsmall-backend-ckn4.onrender.com/v1/api/auth/password-reset/",
         {
           method: "POST",
           headers: {

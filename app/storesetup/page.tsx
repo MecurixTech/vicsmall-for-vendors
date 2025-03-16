@@ -33,9 +33,9 @@ export default function StoreSetup() {
                 </div>
               </div>
 
-              <div className="text-gray-400 px-3">
+              {/* <div className="text-gray-400 px-3">
   https://vicsmall.com/store/
-</div>
+</div> */}
 
               <div className="space-y-3">
                 <label className="block text-sm">Are Your Products PreOrder</label>
