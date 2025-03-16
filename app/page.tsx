@@ -1,3 +1,6 @@
+"use client"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import { Leaderboard } from "../app/components/dashboard/leaderboard";
@@ -9,6 +12,16 @@ import { MiniChart } from "../app/components/dashboard/mini-chart";
 import { Brand } from "./components/dashboard/brand";
 
 export default function Dashboard() {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/Sign-in");
+    }
+  }, [router]);
+
   return (
     <div className="p-4">
       <div className="grid gap-4 md:grid-cols-12">
