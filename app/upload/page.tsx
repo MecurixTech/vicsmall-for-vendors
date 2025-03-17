@@ -11,7 +11,7 @@ export default function Upload() {
   const [validId, setValidId] = useState<File | null>(null);
   const [businessLogo, setBusinessLogo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
 
   const router = useRouter();
 
@@ -28,7 +28,6 @@ export default function Upload() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setLoading(true);
 
     try {
@@ -82,8 +81,7 @@ export default function Upload() {
       router.push("/payment");
     } catch (error) {
       console.error("Error:", error);
-      setError(error.message || "An error occurred");
-    } finally {
+      } finally {
       setLoading(false);
     }
   };

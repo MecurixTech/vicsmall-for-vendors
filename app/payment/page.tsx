@@ -31,14 +31,13 @@ export default function PaymentSetup() {
     account_confirmation: false,
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+;
 
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+        setLoading(true);
 
     try {
       const token = localStorage.getItem("token");
@@ -65,7 +64,7 @@ export default function PaymentSetup() {
       router.push("/ready");
     } catch (error) {
       console.error("Error submitting payment info:", error);
-      setError(error.message || "An error occurred");
+      ;
     } finally {
       setLoading(false);
     }

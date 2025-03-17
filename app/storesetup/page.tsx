@@ -15,14 +15,13 @@ export default function StoreSetup() {
   const [partPayment, setPartPayment] = useState(false);
   const [shopState, setShopState] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+ 
 
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+       setLoading(true);
 
     const requestBody = {
       shop_name: shopName,
@@ -58,7 +57,7 @@ export default function StoreSetup() {
       router.push("/upload");
     } catch (error) {
       console.error("Error:", error);
-      setError(error.message || "An error occurred");
+      
     } finally {
       setLoading(false);
     }
