@@ -13,7 +13,7 @@ export default function RootLayoutClient({
 }) {
   const pathname = usePathname();
 
-  const isAuthPage = pathname === "/Sign-in" || pathname === "/Sign-Up";
+  const isAuthPage = pathname === "/Sign-in" || pathname === "/Sign-Up" || pathname === "/payment" || pathname === "/upload" || pathname === "/ready"|| pathname === "/storesetup";
 
   return (
     <>

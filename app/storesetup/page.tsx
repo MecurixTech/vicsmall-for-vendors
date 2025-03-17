@@ -1,13 +1,68 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {Person} from '@mui/icons-material';
-import Link from "next/link"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Person } from "@mui/icons-material";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function StoreSetup() {
-  const [preOrder, setPreOrder] = useState("yes")
+  const [shopName, setShopName] = useState("");
+  const [preOrder, setPreOrder] = useState("yes");
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [email, setEmail] = useState("");
+  const [partPayment, setPartPayment] = useState(false);
+  const [shopState, setShopState] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const requestBody = {
+      shop_name: shopName,
+      products_preOrder: preOrder === "yes",
+      product_arrival_time: parseInt(arrivalTime, 10),
+      shop_email: email,
+      part_payment: partPayment,
+      shop_state: shopState,
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token found");
+      }
+
+      const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/create-shop", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const data = await response.json();
+      console.log("Response data:", data);
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to create shop");
+      }
+
+      router.push("/upload");
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
@@ -19,23 +74,25 @@ export default function StoreSetup() {
             <p className="text-gray-600">Tell us a little about the business</p>
           </div>
 
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm mb-1.5">
                   Shop Name <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Input className="pl-10" placeholder="Place holder" required />
-                  <div className="absolute left-3 absolute inset-y-0 my-auto flex items-center text-gray-400 hover:text-gray-600">
+                  <Input
+                    className="pl-10"
+                    placeholder="Place holder"
+                    required
+                    value={shopName}
+                    onChange={(e) => setShopName(e.target.value)}
+                  />
+                  <div className="absolute left-3 inset-y-0 my-auto flex items-center text-gray-400 hover:text-gray-600">
                     <Person className="h-5 w-5" />
                   </div>
                 </div>
               </div>
-
-              {/* <div className="text-gray-400 px-3">
-  https://vicsmall.com/store/
-</div> */}
 
               <div className="space-y-3">
                 <label className="block text-sm">Are Your Products PreOrder</label>
@@ -75,14 +132,25 @@ export default function StoreSetup() {
                 <label className="block text-sm mb-1.5">
                   How long does it take for your products to arrive ? <span className="text-red-500">*</span>
                 </label>
-                <Input placeholder="Placeholder" required />
+                <Input
+                  placeholder="Placeholder"
+                  required
+                  value={arrivalTime}
+                  onChange={(e) => setArrivalTime(e.target.value)}
+                />
               </div>
 
               <div>
                 <label className="block text-sm mb-1.5">
                   Email <span className="text-red-500">*</span>
                 </label>
-                <Input placeholder="Placeholder" type="email" required />
+                <Input
+                  placeholder="Placeholder"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
 
               <div>
@@ -95,6 +163,8 @@ export default function StoreSetup() {
                     type="checkbox"
                     id="part-payment"
                     className="h-4 w-4 rounded border-gray-300 text-[#FF7A45] focus:ring-[#FF7A45]"
+                    checked={partPayment}
+                    onChange={(e) => setPartPayment(e.target.checked)}
                   />
                   <label htmlFor="part-payment" className="text-sm">
                     Part Payment
@@ -104,13 +174,14 @@ export default function StoreSetup() {
 
               <div>
                 <label className="block text-sm mb-1.5">State</label>
-                <Input placeholder="Placeholder" />
-                
+                <Input
+                  placeholder="Placeholder"
+                  value={shopState}
+                  onChange={(e) => setShopState(e.target.value)}
+                />
               </div>
 
               <div className="space-y-4">
-               
-
                 <div className="flex items-start space-x-2">
                   <input
                     type="checkbox"
@@ -128,16 +199,19 @@ export default function StoreSetup() {
                 </div>
               </div>
             </div>
-          </form>
-        </div>
 
-        <div className="border-t p-6 flex justify-end">
-            <Link href="/upload" >
-          <Button className="bg-[#FF7A45] hover:bg-[#FF7A45]/90 text-white px-8">Next</Button>
-          </Link>
+            <div className="border-t p-6 flex justify-end">
+              <Button
+                type="submit"
+                className="bg-[#FF7A45] hover:bg-[#FF7A45]/90 text-white px-8"
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Next"}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  )
+  );
 }
-

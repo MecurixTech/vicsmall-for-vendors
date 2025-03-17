@@ -58,10 +58,8 @@ export default function SignIn() {
   
       localStorage.setItem("token", data.Data.access);
       console.log("Token stored:", data.Data.access); 
-  
-      localStorage.setItem("username", data.fullName);
-  
-      router.push("/");
+   
+      router.push("/storesetup");
     } catch (error) {
       console.log(error);
       setError("An error occurred");

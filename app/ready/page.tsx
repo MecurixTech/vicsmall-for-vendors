@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import Verified from '@mui/icons-material/Verified';
+import Link from "next/link";
 
 export default function ready() {
   return (
@@ -14,15 +15,16 @@ export default function ready() {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Button
-            variant="outline"
-            className="border-[#1D1B44] text-[#1D1B44] hover:bg-[#1D1B44] hover:text-white order-2 sm:order-1"
-          >
-            Back To Marketplace
-          </Button>
-          <Button className="bg-[#FF7A45] hover:bg-[#FF7A45]/90 text-white px-8 order-1 sm:order-2">
-            Go To Dashboard
-          </Button>
+          {/* <Button
+  variant="outline"
+  className="border-[#1D1B44] text-[#1D1B44] hover:bg-[#1D1B44] hover:text-white order-2 sm:order-1"
+>
+  <Link href="/">Back To Marketplace</Link>
+</Button> */}
+
+<Button className="bg-[#FF7A45] hover:bg-[#FF7A45]/90 text-white px-8 order-1 sm:order-2">
+  <Link href="/">Go To Dashboard</Link>
+</Button>
         </div>
       </div>
     </div>

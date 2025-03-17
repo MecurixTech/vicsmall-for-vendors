@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Upload, ChevronDown } from "lucide-react";
+import { Upload } from "lucide-react";
 
 export default function CreateProductPage() {
   const [productImages, setProductImages] = useState<string[]>([]);
@@ -27,16 +27,16 @@ export default function CreateProductPage() {
   const [productTags, setProductTags] = useState("");
   const [productSalePrice, setProductSalePrice] = useState("");
   const [productRegularPrice, setProductRegularPrice] = useState("");
-  const [productVisibility] = useState(true);
-  const [productStatus] = useState(true);
-  const [productVariant] = useState("");
+  const [productVisibility, setProductVisibility] = useState(true);
+  const [productStatus, setProductStatus] = useState(true);
+  const [productVariant, setProductVariant] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-          setToken(storedToken);
+      setToken(storedToken);
     } else {
       console.error("No token found in localStorage");
     }
@@ -139,7 +139,7 @@ export default function CreateProductPage() {
       });
 
       if (response.ok) {
-        console.log("Product created successfully");
+        window.alert("Product created successfully");
       } else {
         const errorData = await response.json();
         console.error("Failed to create product", errorData);
@@ -150,6 +150,7 @@ export default function CreateProductPage() {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div className="bg-[#F9F7F7] min-h-screen pb-16 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
@@ -191,12 +192,13 @@ export default function CreateProductPage() {
                   <SelectTrigger className="w-full h-[43px] border border-[#D9D9D9] rounded-md bg-white">
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Clothing</SelectItem>
-                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Electronics</SelectItem>
-                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Home & Garden</SelectItem>
-                    <SelectItem value="3fa85f64-5717-4562-b3fc-2c963f66afa6">Beauty</SelectItem>
-                  </SelectContent>
+                
+                 <SelectContent>
+  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Clothing</SelectItem>
+  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Electronics</SelectItem>
+  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Home & Garden</SelectItem>
+  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Beauty</SelectItem>
+</SelectContent>
                 </Select>
               </div>
               <div className="mt-6">
@@ -211,21 +213,12 @@ export default function CreateProductPage() {
             </div>
             <div className="mb-8">
               <label className="block mb-1 text-base">Variant</label>
-              <div className="flex items-center w-full h-[66px] border border-[#D9D9D9] rounded-md bg-white px-4 relative">
-                <div className="flex items-center gap-8">
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-300">Size</span>
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-300">Color</span>
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
-                  </div>
-                </div>
-                <button className="absolute right-4 px-4 h-[38px] rounded-[10px] border border-[#D9D9D9] text-sm bg-white">
-                  Add variant
-                </button>
-              </div>
+              <Input
+                className="w-full h-[38px] border border-[#D9D9D9] rounded-md bg-white"
+                placeholder="Enter product variant"
+                value={productVariant}
+                onChange={(e) => setProductVariant(e.target.value)}
+              />
             </div>
             <div className="mb-8">
               <label className="block mb-1 text-base">
@@ -408,11 +401,19 @@ export default function CreateProductPage() {
               <div className="flex flex-col md:flex-row gap-6 mb-8">
                 <div className="w-full md:w-[223px] h-[63px] border border-[#D9D9D9] rounded-[10px] bg-white flex items-center justify-between px-4">
                   <span>Status</span>
-                  <ChevronDown className="w-5 h-5 text-gray-400 rotate-90" />
+                  <Checkbox
+                    id="status"
+                    checked={productStatus}
+                    onCheckedChange={() => setProductStatus(!productStatus)}
+                  />
                 </div>
                 <div className="w-full md:w-[248px] h-[63px] border border-[#D9D9D9] rounded-[10px] bg-white flex items-center justify-between px-4">
                   <span>Visibility</span>
-                  <ChevronDown className="w-5 h-5 text-gray-400 rotate-90" />
+                  <Checkbox
+                    id="visibility"
+                    checked={productVisibility}
+                    onCheckedChange={() => setProductVisibility(!productVisibility)}
+                  />
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-6 justify-end">

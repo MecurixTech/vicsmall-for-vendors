@@ -45,7 +45,7 @@ export default function Signup() {
       );
   
       const data = await res.json();
-      console.log("Response data:", data); // Log the response data
+      console.log("Response data:", data); 
   
       if (!res.ok) {
         if (data?.Data?.email) {
@@ -57,10 +57,13 @@ export default function Signup() {
       localStorage.setItem("fullName", fullName.trim());
       localStorage.setItem("email", email.trim());
       localStorage.setItem("phoneNumber", phoneNumber.trim());
+      localStorage.setItem("token", data.Data.access);
+      console.log("Token stored:", data.Data.access); 
+  
   
       if (data?.Data?.token) {
         localStorage.setItem("token", data.Data.access);
-        console.log("Token stored:", data.Data.access); // Log the stored token
+        console.log("Token stored:", data.Data.access); 
       } else {
         console.error("Token not found in response");
       }
