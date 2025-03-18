@@ -16,7 +16,6 @@ import {
   Assignment,
   AccessTime,
   CheckCircleOutline,
-  Refresh,
   MoreVert,
   Close,
 } from "@mui/icons-material";
@@ -64,7 +63,7 @@ const OrdersPage = () => {
         else toast.error("An error occurred!");
       })
       .finally(() => toast.dismiss(loadingOrders));
-  }, []);
+  }, [accessToken]);
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-6">

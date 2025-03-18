@@ -3,7 +3,6 @@
 import { Profile } from "@/app/data/dummyTypes";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type FormData = {

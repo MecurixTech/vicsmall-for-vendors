@@ -1,7 +1,6 @@
 "use client";
 
 import { MoreVertOutlined, SearchOutlined } from "@mui/icons-material";
-import Image from "next/image";
 import StarRating from "../components/star-rating";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -40,7 +39,8 @@ const Reviews = () => {
         toast.error("An error occurred!");
       })
       .finally(() => toast.dismiss(loadingReviews));
-  }, []);
+  }, [accessToken]);
+
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">

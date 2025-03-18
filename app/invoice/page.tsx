@@ -3,7 +3,6 @@
 import { Invoice } from "@/app/data/dummyTypes";
 import axios from "axios";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -34,7 +33,7 @@ const InvoicesPage = () => {
         toast.error(error.response.data.Message);
       })
       .then(() => toast.dismiss(loadingInvoices));
-  }, []);
+  }, [accessToken]);
 
   return (
     <>

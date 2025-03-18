@@ -35,7 +35,7 @@ const Profile = () => {
         toast.error("An error occurred!");
       })
       .finally(() => toast.dismiss(loadingProfile));
-  }, []);
+  }, [accessToken]);
 
   return (
     <>
