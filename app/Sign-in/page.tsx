@@ -72,8 +72,8 @@ export default function SignIn() {
 
       const profileData = await profileRes.json();
       console.log("Profile Data:", profileData);
-
-      if  (profileData !== "") {
+      
+      if (profileData.Data.account_name) {
         router.push("/");
       } else {
         router.push("/storesetup");
