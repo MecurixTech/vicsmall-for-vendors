@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
@@ -12,7 +12,6 @@ import { MiniChart } from "../app/components/dashboard/mini-chart";
 import { Brand } from "./components/dashboard/brand";
 
 export default function Dashboard() {
-
   const router = useRouter();
 
   useEffect(() => {
@@ -35,10 +34,10 @@ export default function Dashboard() {
                 <p className="text-base font-normal text-muted-foreground">
                   Total Revenue
                 </p>
-                <p className="text-2xl font-bold">$11,210</p>
+                <p className="text-2xl font-bold">$0</p>
                 <div>
                   <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500"> 12%</span>
+                  <span className="text-xs font-normal text-red-500">0%</span>
                 </div>
               </div>
               <MiniChart />
@@ -49,12 +48,12 @@ export default function Dashboard() {
                 <p className="text-base font-normal text-muted-foreground">
                   Total Revenue
                 </p>
-                <p className="text-2xl font-bold">$11,210</p>
+                <p className="text-2xl font-bold">$0</p>
                 <div>
                   <TrendingUpIcon sx={{ color: "green" }} fontSize="small" />
                   <span className="text-xs font-normal text-green-500">
                     {" "}
-                    12%
+                    0%
                   </span>
                 </div>
               </div>
@@ -89,10 +88,10 @@ export default function Dashboard() {
                 <p className="text-base font-normal text-muted-foreground">
                   Total Revenue
                 </p>
-                <p className="text-2xl font-bold">$11,210</p>
+                <p className="text-2xl font-bold">$0</p>
                 <div>
                   <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500"> 12%</span>
+                  <span className="text-xs font-normal text-red-500">0%</span>
                 </div>
               </div>
               <MiniChart />
@@ -103,10 +102,10 @@ export default function Dashboard() {
                 <p className="text-base font-normal text-muted-foreground">
                   Total Revenue
                 </p>
-                <p className="text-2xl font-bold">$11,210</p>
+                <p className="text-2xl font-bold">$0</p>
                 <div>
                   <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500"> 12%</span>
+                  <span className="text-xs font-normal text-red-500">0%</span>
                 </div>
               </div>
               <MiniChart />
@@ -131,13 +130,13 @@ export default function Dashboard() {
 
           <Card className="">
             <div className="relative">
-<Image
-  src="/jacket.jpeg"
-  alt="Wooly Jacket"
-  width={400}
-  height={160}
-  className="h-40 w-full rounded-lg object-cover shadow-sm"
-/>
+              <Image
+                src="/jacket.jpeg"
+                alt="Wooly Jacket"
+                width={400}
+                height={160}
+                className="h-40 w-full rounded-lg object-cover shadow-sm"
+              />
               <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
                 <h2 className="text-lg font-semibold text-white">
                   Trending now
