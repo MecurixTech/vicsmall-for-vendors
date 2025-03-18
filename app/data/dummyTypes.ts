@@ -29,3 +29,11 @@ export type Invoice = {
   status: string;
   created_at: string;
 };
+
+export type Order = {
+  order_id: string;
+  customer: string;
+  amount: string;
+  status: string;
+  created_at: string;
+};

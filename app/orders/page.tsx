@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -18,41 +18,18 @@ import {
   CheckCircleOutline,
   Refresh,
   MoreVert,
+  Close,
 } from "@mui/icons-material";
 import Link from "next/link";
-
-type OrderStatus = "pending" | "completed" | "canceled";
-
-interface Order {
-  id: string;
-  customerName: string;
-  amount: number;
-  status: OrderStatus;
-}
-
-const stats = {
-  allOrders: 7000,
-  pending: 200,
-  completed: 1000,
-  inProgress: 250,
-};
-
-const orders: Order[] = [
-  { id: "#VICS765", customerName: "VERA", amount: 100, status: "pending" },
-  { id: "#VICS545", customerName: "SUSAN", amount: 10, status: "completed" },
-  { id: "#VICS543", customerName: "DAVE", amount: 100, status: "canceled" },
-  { id: "#VICS765", customerName: "FRED", amount: 10, status: "pending" },
-  { id: "#VICS545", customerName: "CHIKE", amount: 100, status: "completed" },
-  { id: "#VICS543", customerName: "DOM", amount: 10, status: "canceled" },
-  { id: "#VICS765", customerName: "VIN", amount: 100, status: "pending" },
-  { id: "#VICS545", customerName: "STAR", amount: 10, status: "completed" },
-  { id: "#VICS543", customerName: "TREM", amount: 100, status: "canceled" },
-  { id: "#VICS765", customerName: "STEPH", amount: 10, status: "pending" },
-  { id: "#VICS545", customerName: "NKEM", amount: 100, status: "completed" },
-  { id: "#VICS543", customerName: "ANDY", amount: 10, status: "canceled" },
-];
+import toast from "react-hot-toast";
+import axios from "axios";
+import { Order } from "../data/dummyTypes";
 
 const OrdersPage = () => {
+  const accessToken =
+    (typeof window !== "undefined" && localStorage.getItem("token")) || "";
+
+  const [orders, setOrders] = useState([]);
   const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set());
 
   const handleOrderSelect = (orderId: string) => {
@@ -65,6 +42,30 @@ const OrdersPage = () => {
     setSelectedOrders(newSelected);
   };
 
+  useEffect(() => {
+    const loadingOrders = toast.loading("Fetching your orders...");
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/shop/vendor/all-order`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.dismiss(loadingOrders);
+        if (res.status === 200) {
+          setOrders(res.data.Data);
+          toast.success(res.data.Message);
+        } else {
+          toast.error(res.data.Message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.status === 400) toast.error(error.response.data.Message);
+        else toast.error("An error occurred!");
+      })
+      .finally(() => toast.dismiss(loadingOrders));
+  }, []);
+
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-6">
       <Card className="bg-[#040458] text-white">
@@ -76,28 +77,49 @@ const OrdersPage = () => {
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
               <Assignment className="h-5 w-5" />
               <div>
-                <div className="text-2xl font-bold">{stats.allOrders}</div>
+                <div className="text-2xl font-bold">{orders.length}</div>
                 <div className="text-xs opacity-70">ALL ORDERS</div>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
               <AccessTime className="h-5 w-5" />
               <div>
-                <div className="text-2xl font-bold">{stats.pending}</div>
+                <div className="text-2xl font-bold">
+                  {
+                    orders.filter(
+                      (order: Order) =>
+                        order.status.toLowerCase() === "pending",
+                    ).length
+                  }
+                </div>
                 <div className="text-xs opacity-70">PENDING</div>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
               <CheckCircleOutline className="h-5 w-5" />
               <div>
-                <div className="text-2xl font-bold">{stats.completed}</div>
+                <div className="text-2xl font-bold">
+                  {
+                    orders.filter(
+                      (order: Order) =>
+                        order.status.toLowerCase() === "completed",
+                    ).length
+                  }
+                </div>
                 <div className="text-xs opacity-70">COMPLETED</div>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
-              <Refresh className="h-5 w-5" />
+              <Close className="h-5 w-5" />
               <div>
-                <div className="text-2xl font-bold">{stats.inProgress}</div>
+                <div className="text-2xl font-bold">
+                  {
+                    orders.filter(
+                      (order: Order) =>
+                        order.status.toLowerCase() === "canceled",
+                    ).length
+                  }
+                </div>
                 <div className="text-xs opacity-70">PROGRESS</div>
               </div>
             </div>
@@ -125,23 +147,23 @@ const OrdersPage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.id}>
+              {orders.map((order: Order) => (
+                <TableRow key={order.order_id}>
                   <TableCell>
                     <Checkbox
-                      checked={selectedOrders.has(order.id)}
-                      onCheckedChange={() => handleOrderSelect(order.id)}
+                      checked={selectedOrders.has(order.order_id)}
+                      onCheckedChange={() => handleOrderSelect(order.order_id)}
                     />
                   </TableCell>
                   <TableCell className="font-medium">
                     <Link
-                      href={`orders/${order.id.slice(1, 8)}`}
+                      href={`orders/${order.order_id.slice(1, 8)}`}
                       className="hover:underline"
                     >
-                      {order.id}
+                      {order.order_id}
                     </Link>
                   </TableCell>
-                  <TableCell>{order.customerName}</TableCell>
+                  <TableCell>{order.customer}</TableCell>
                   <TableCell>${order.amount}</TableCell>
                   <TableCell>
                     <span
