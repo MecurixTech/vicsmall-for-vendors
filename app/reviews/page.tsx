@@ -1,9 +1,46 @@
+"use client";
+
 import { MoreVertOutlined, SearchOutlined } from "@mui/icons-material";
-import { reviews } from "../data/dummyData";
 import Image from "next/image";
 import StarRating from "../components/star-rating";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { Review } from "../data/dummyTypes";
 
 const Reviews = () => {
+  const accessToken =
+    (typeof window !== "undefined" && localStorage.getItem("token")) || "";
+
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const loadingReviews = toast.loading("Fetching your orders...");
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/shop/vendor/all_customer_review`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      )
+      .then((res) => {
+        console.log(res);
+        toast.dismiss(loadingReviews);
+        if (res.status === 200) {
+          setReviews(res.data.Data);
+          if (reviews.length === 0) {
+            toast.error("No reviews found for this vendor");
+          } else toast.success(res.data.Message);
+        } else {
+          toast.error(res.data.Message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred!");
+      })
+      .finally(() => toast.dismiss(loadingReviews));
+  }, []);
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">
@@ -30,11 +67,8 @@ const Reviews = () => {
 
       <div className="mb-4 flex items-center gap-4 text-sm">
         <button className="font-semibold text-accent-900">
-          ALL REVIEWS [250]
+          ALL REVIEWS [{reviews.length}]
         </button>
-        <button>APPROVED [120]</button>
-        <button>PENDING [80]</button>
-        <button>TRASH [34]</button>
       </div>
 
       <div className="overscroll-x-scroll w-full">
@@ -49,8 +83,6 @@ const Reviews = () => {
                   aria-label="Select all items"
                 />
               </th>
-              <th>Type</th>
-              <th>Product</th>
               <th>Rating</th>
               <th>Review</th>
               <th>Customer</th>
@@ -59,7 +91,7 @@ const Reviews = () => {
           </thead>
 
           <tbody>
-            {reviews.map((review) => (
+            {reviews.map((review: Review) => (
               <tr key={review.id}>
                 <td>
                   <input
@@ -69,32 +101,14 @@ const Reviews = () => {
                     aria-label="Select all items"
                   />
                 </td>
-                <td>{review.type}</td>
-                <td className="flex items-center gap-2">
-                  <Image
-                    src={review.product.imgSrc}
-                    alt={review.product.name}
-                    height={48}
-                    width={48}
-                    className="rounded-xl"
-                  />
-                  <div>
-                    <p>{review.product.name}</p>
-                    <p className="text-xs">
-                      Category: {review.product.category}
-                    </p>
-                  </div>
-                </td>
                 <td>
                   <div className="flex w-fit items-center">
                     <StarRating rating={review.rating} size="inherit" />
                   </div>
                 </td>
-                <td className="max-w-[40ch] truncate">
-                  {review.reviewMessage}
-                </td>
-                <td>{review.customer}</td>
-                <td>{review.submittedOn}</td>
+                <td className="max-w-[40ch] truncate">{review.review}</td>
+                <td>{review.customer_name}</td>
+                <td>{new Date(review.created_at).toDateString()}</td>
               </tr>
             ))}
           </tbody>

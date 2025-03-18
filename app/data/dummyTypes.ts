@@ -1,15 +1,10 @@
-export type review = {
+export type Review = {
   id: number;
-  type: string;
-  product: {
-    name: string;
-    category: string;
-    imgSrc: string;
-  };
+  product_name: string;
+  customer_name: string;
   rating: number;
-  reviewMessage: string;
-  submittedOn: string;
-  customer: string;
+  review: string;
+  created_at: string;
 };
 
 export type Profile = {
