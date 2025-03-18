@@ -21,3 +21,11 @@ export type Profile = {
   store_name: string;
   is_vendor: boolean;
 };
+
+export type Invoice = {
+  order_id: string;
+  customer_email: string;
+  amount: string;
+  status: string;
+  created_at: string;
+};
