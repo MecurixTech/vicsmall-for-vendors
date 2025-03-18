@@ -20,16 +20,16 @@ export default function SignIn() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-  
+
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-  
+
     if (!trimmedEmail || !trimmedPassword) {
       setError("Email and password are required.");
       setLoading(false);
       return;
     }
-  
+
     try {
       const res = await fetch(
         "https://vicsmall-backend-ckn4.onrender.com/v1/api/auth/login-vendor",
@@ -45,21 +45,39 @@ export default function SignIn() {
           }),
         },
       );
-  
+
       const data = await res.json();
       console.log("Response Status:", res.status);
       console.log("Response Data:", data);
-  
+
       if (!res.ok) {
         throw new Error(
           data.message || `Login failed with status ${res.status}`,
         );
       }
-  
+
       localStorage.setItem("token", data.Data.access);
-      console.log("Token stored:", data.Data.access); 
-   
-      router.push("/storesetup");
+      console.log("Token stored:", data.Data.access);
+
+      const profileRes = await fetch(
+        "https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-payment",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${data.Data.access}`,
+          },
+        },
+      );
+
+      const profileData = await profileRes.json();
+      console.log("Profile Data:", profileData);
+
+      if  (profileData !== "") {
+        router.push("/");
+      } else {
+        router.push("/storesetup");
+      }
     } catch (error) {
       console.log(error);
       setError("An error occurred");
@@ -67,6 +85,7 @@ export default function SignIn() {
       setLoading(false);
     }
   };
+
   return (
     <div className="mx-auto w-full max-w-md space-y-8 p-4 pt-48 lg:pt-36">
       <div className="space-y-2 text-center">
