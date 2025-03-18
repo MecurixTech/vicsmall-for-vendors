@@ -8,14 +8,66 @@ import {
   WindowOutlined,
 } from "@mui/icons-material";
 import Link from "next/link";
-import { useState } from "react";
-import { products } from "../data/dummyData";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Filters from "../components/products/filters";
+
+interface Product {
+  id: string;
+  product_name: string;
+  product_description: string;
+  category: string;
+  product_tags: string;
+  product_sale_price: string;
+  product_regular_price: string;
+  product_visibility: boolean;
+  product_status: boolean;
+  created_at: string;
+  updated_at: string;
+  imgSrc: string; 
+}
 
 const Products = () => {
   const [isInListView, setIsInListView] = useState<boolean>(true);
   const [isShowingFilters, setIsShowingFilters] = useState<boolean>(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-products", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products || []);
+        } else {
+          console.error("Failed to fetch products");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -73,10 +125,10 @@ const Products = () => {
 
           <div className="my-4 flex flex-wrap items-center gap-2 text-xs md:gap-4 md:text-sm">
             <button className="font-medium text-accent-900">
-              ALL PRODUCTS [100]
+              ALL PRODUCTS [{products.length}]
             </button>
-            <button>AVAILABLE [85]</button>
-            <button>OUT OF STOCK [15]</button>
+            <button>AVAILABLE [{products.filter(product => product.product_status).length}]</button>
+            <button>OUT OF STOCK [{products.filter(product => !product.product_status).length}]</button>
           </div>
 
           {isInListView ? (
@@ -99,7 +151,7 @@ const Products = () => {
                       <td>
                         <Image
                           src={product.imgSrc}
-                          alt={product.name}
+                          alt={product.product_name}
                           height={48}
                           width={48}
                           className="h-12 w-12 rounded-lg object-cover"
@@ -110,19 +162,19 @@ const Products = () => {
                           href={`products/${product.id}`}
                           className="hover:underline"
                         >
-                          {product.name}
+                          {product.product_name}
                         </Link>
                       </td>
-                      <td>{product.price}</td>
+                      <td>{product.product_sale_price}</td>
                       <td className="capitalize">{product.category}</td>
                       <td>
                         <span
-                          className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
+                          className={`${product.product_status ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
                         >
-                          {product.status}
+                          {product.product_status ? "Available" : "Out of stock"}
                         </span>
                       </td>
-                      <td>{product.date}</td>
+                      <td>{new Date(product.created_at).toLocaleDateString()}</td>
                       <td>
                         <DeleteOutlined />
                       </td>
@@ -140,26 +192,26 @@ const Products = () => {
                   className="relative overflow-hidden rounded-xl bg-white"
                 >
                   <span
-                    className={`${product.status === "Available" ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} absolute right-4 top-4 rounded-lg p-2 text-xs`}
+                    className={`${product.product_status ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} absolute right-4 top-4 rounded-lg p-2 text-xs`}
                   >
-                    {product.status}
+                    {product.product_status ? "Available" : "Out of stock"}
                   </span>
                   <Image
                     src={product.imgSrc}
                     height={48}
                     width={48}
-                    alt={product.name}
+                    alt={product.product_name}
                     className="h-32 w-full"
                   />
                   <div className="p-2 text-sm">
-                    <p className="font-medium">{product.name}</p>
+                    <p className="font-medium">{product.product_name}</p>
                     <p className="text-gray-400">
                       Category: {product.category}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span>{product.date}</span>
+                      <span>{new Date(product.created_at).toLocaleDateString()}</span>
                       <span className="text-lg font-bold text-gray-800">
-                        {product.price}
+                        {product.product_sale_price}
                       </span>
                     </div>
                   </div>

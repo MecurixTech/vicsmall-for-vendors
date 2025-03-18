@@ -1,7 +1,10 @@
 "use client";
 
+"use client";
+
 import type React from "react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +35,8 @@ export default function CreateProductPage() {
   const [productVariant, setProductVariant] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [token, setToken] = useState<string | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -140,6 +145,8 @@ export default function CreateProductPage() {
 
       if (response.ok) {
         window.alert("Product created successfully");
+     
+        router.push("/products");
       } else {
         const errorData = await response.json();
         console.error("Failed to create product", errorData);
@@ -150,7 +157,6 @@ export default function CreateProductPage() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="bg-[#F9F7F7] min-h-screen pb-16 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
