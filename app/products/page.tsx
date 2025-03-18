@@ -24,7 +24,7 @@ interface Product {
   product_status: boolean;
   created_at: string;
   updated_at: string;
-  imgSrc: string; 
+  imgSrc: string;
 }
 
 const Products = () => {
@@ -41,17 +41,20 @@ const Products = () => {
           throw new Error("No authentication token found");
         }
 
-        const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-products", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+        const response = await fetch(
+          "https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-products",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         if (response.ok) {
           const data = await response.json();
-          setProducts(data.products || []);
+          setProducts(data.Data || []);
         } else {
           console.error("Failed to fetch products");
         }
@@ -78,7 +81,7 @@ const Products = () => {
       <div className="flex flex-col items-start gap-4 md:flex-row">
         {isShowingFilters && <Filters />}
 
-        <div className="flex-[5] w-full">
+        <div className="w-full flex-[5]">
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-8">
             <div className="flex w-full items-center gap-2 md:flex-1">
               <div className="relative w-full">
@@ -127,8 +130,14 @@ const Products = () => {
             <button className="font-medium text-accent-900">
               ALL PRODUCTS [{products.length}]
             </button>
-            <button>AVAILABLE [{products.filter(product => product.product_status).length}]</button>
-            <button>OUT OF STOCK [{products.filter(product => !product.product_status).length}]</button>
+            <button>
+              AVAILABLE [
+              {products.filter((product) => product.product_status).length}]
+            </button>
+            <button>
+              OUT OF STOCK [
+              {products.filter((product) => !product.product_status).length}]
+            </button>
           </div>
 
           {isInListView ? (
@@ -171,10 +180,14 @@ const Products = () => {
                         <span
                           className={`${product.product_status ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
                         >
-                          {product.product_status ? "Available" : "Out of stock"}
+                          {product.product_status
+                            ? "Available"
+                            : "Out of stock"}
                         </span>
                       </td>
-                      <td>{new Date(product.created_at).toLocaleDateString()}</td>
+                      <td>
+                        {new Date(product.created_at).toLocaleDateString()}
+                      </td>
                       <td>
                         <DeleteOutlined />
                       </td>
@@ -184,7 +197,7 @@ const Products = () => {
               </table>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xs:grid-cols-2">
               {products.map((product) => (
                 <Link
                   href={`products/${product.id}`}
@@ -209,7 +222,9 @@ const Products = () => {
                       Category: {product.category}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span>{new Date(product.created_at).toLocaleDateString()}</span>
+                      <span>
+                        {new Date(product.created_at).toLocaleDateString()}
+                      </span>
                       <span className="text-lg font-bold text-gray-800">
                         {product.product_sale_price}
                       </span>
