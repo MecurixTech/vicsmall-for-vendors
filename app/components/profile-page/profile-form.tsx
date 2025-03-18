@@ -1,49 +1,52 @@
 "use client";
 
+import { Profile } from "@/app/data/dummyTypes";
+import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-type ProfileData = {
+type FormData = {
   full_name: string;
-  email: string;
   phone_number: string;
-  country: string;
-  location: string;
   about_me: string;
+  store_name: string;
 };
 
-const ProfileForm = () => {
-  const [initialValues, setInitialValues] = useState({
-    full_name: "",
-    email: "",
-    phone_number: "",
-    about_me: "",
-    country: "",
-    location: ""
-  });
+const ProfileForm = ({ profileDetails }: { profileDetails: Profile }) => {
+  const accessToken =
+    (typeof window !== "undefined" && localStorage.getItem("token")) || "";
 
-  useEffect(() => {
-    setInitialValues({
-      full_name: localStorage.getItem("fullName") || "",
-      email: localStorage.getItem("email") || "",
-      phone_number: localStorage.getItem("phoneNumber") || "",
-      country: localStorage.getItem("country") || "",
-      location: localStorage.getItem("location") || "",
-      about_me:
-        localStorage.getItem("aboutMe") ||
-        "This is some information about John Doe",
-    });
-  }, []);
+  const initialValues = {
+    full_name: profileDetails.full_name,
+    phone_number: profileDetails.phone_number,
+    about_me: profileDetails.about_me,
+    store_name: profileDetails.store_name,
+  };
 
-  const handleSubmit = (values: ProfileData) => {
-    console.log(values);
-    localStorage.setItem("fullName", values.full_name);
-    localStorage.setItem("email", values.email);
-    localStorage.setItem("phoneNumber", values.phone_number);
-    localStorage.setItem("aboutMe", values.about_me);
-    localStorage.setItem("country", values.country);
-    localStorage.setItem("location", values.location);
-    
+  const handleSubmit = (values: FormData) => {
+    const editingProfile = toast.loading("Updating your profile...");
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/vendor-profile`,
+        values,
+        { headers: { Authorization: `Bearer ${accessToken}` } },
+      )
+      .then((res) => {
+        console.log(res);
+        toast.dismiss(editingProfile);
+        if (res.status === 200) {
+          toast.success(res.data.Message);
+          window.location.reload();
+        } else {
+          toast.error(res.data.Message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred!");
+      })
+      .finally(() => toast.dismiss(editingProfile));
   };
 
   return (
@@ -61,31 +64,17 @@ const ProfileForm = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="mb-2">
-            Email
-          </label>
-          <Field type="text" name="email" className="w-full" />
-        </div>
-       
-        <div className="mb-4">
-          <label htmlFor="country" className="mb-2">
-            Country
-          </label>
-          <Field type="text" name="country" className="w-full" />
-        </div>
-       
-        <div className="mb-4">
-          <label htmlFor="location" className="mb-2">
-            Location
-          </label>
-          <Field type="text" name="location" className="w-full" />
-        </div>
-
-        <div className="mb-4">
           <label htmlFor="phone_number" className="mb-2">
             Phone number
           </label>
           <Field type="text" name="phone_number" className="w-full" />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="store_name" className="mb-2">
+            Store name
+          </label>
+          <Field type="text" name="store_name" className="w-full" />
         </div>
 
         <div className="mb-4">

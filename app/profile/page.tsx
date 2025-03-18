@@ -1,58 +1,42 @@
-"use client"
+"use client";
 import Image from "next/image";
 import ProfileForm from "../components/profile-page/profile-form";
 import ChangePasswordForm from "../components/profile-page/change-password-form";
 
-
 import { useEffect, useState } from "react";
-
-// const Navbar = () => {
-//   const [fullName, setfullName] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const storedfullName = localStorage.getItem("fullName");
-//     if (storedfullName) {
-//       setfullName(storedfullName);
-//     }
-//   }, []);// 
+import toast from "react-hot-toast";
+import axios from "axios";
+import { Profile as ProfileType } from "../data/dummyTypes";
 
 const Profile = () => {
-  const [fullName, setfullName] = useState<string | null>(null);
-  const [email, setemail] = useState<string | null>(null);
-  const [phoneNumber, setphoneNumber] = useState<string | null>(null);
-  const [country, setcountry] = useState<string | null>(null);
-  const [location, setlocation] = useState<string | null>(null);
+  const accessToken =
+    (typeof window !== "undefined" && localStorage.getItem("token")) || "";
 
-    useEffect(() => {
-      const storedfullName = localStorage.getItem("fullName");
-      if (storedfullName) {
-        setfullName(storedfullName);
-      }
+  const [profileDetails, setProfileDetails] = useState<ProfileType>();
 
-      const storedlocation = localStorage.getItem("location");
-      if (storedlocation) {
-        setlocation(storedlocation);
-      }
+  useEffect(() => {
+    const loadingProfile = toast.loading("Loading user profile...");
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/vendor-profile`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.dismiss(loadingProfile);
+        if (res.status === 200) {
+          setProfileDetails(res.data.Data);
+          toast.success(res.data.Message);
+        } else {
+          toast.error(res.data.Message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred!");
+      })
+      .finally(() => toast.dismiss(loadingProfile));
+  }, []);
 
-      const storedcountry = localStorage.getItem("country");
-      if (storedcountry) {
-        setcountry(storedcountry);
-      }
-
-      const storedemail = localStorage.getItem("email");
-      if (storedemail) {
-        setemail(storedemail);
-      }
-
-      const storedphoneNumber = localStorage.getItem("phoneNumber");
-      if (storedphoneNumber) {
-        setphoneNumber(storedphoneNumber);
-      }
-
-    
-    }, []);
-
-  
   return (
     <>
       <h1 className="mb-4 hidden text-3xl font-bold text-gray-800 md:block">
@@ -72,45 +56,45 @@ const Profile = () => {
               className="h-12 w-12 rounded-full"
             />
             <div>
-            <span className="hidden text-xs sm:block">
-            {fullName || "Guest"}
-          </span>
+              <span className="text-xs sm:block">
+                {profileDetails?.full_name}
+              </span>
               <p className="text-xs text-gray-400">Vendor</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
-            <span>COUNTRY</span>
-            <span className="text-right">
-            {country || "Guest"}
-              </span>
-          </div>
-
-          <div className="flex items-center justify-between gap-4 border-b py-3">
-            <span>LOCATION</span>
-            <span className="text-right">
-            {location || "Guest"}
-              </span>
+            <span>STORE NAME</span>
+            <span className="text-right">{profileDetails?.store_name}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>PHONE NUMBER</span>
-            <span className="hidden text-xs sm:block">
-            {phoneNumber || "Guest"}
-          </span>
+            <span className="text-xs sm:block">
+              {profileDetails?.phone_number}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between gap-4 border-b py-3">
+            <span>ABOUT ME</span>
+            <span className="text-xs sm:block">{profileDetails?.about_me}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 pt-3">
             <span>EMAIL ADDRESS</span>
-           < span className="hidden text-xs text-right sm:block">
-            {email || "Guest"}
-          </span>
+            <span className="text-right text-xs sm:block">
+              {profileDetails?.email}
+            </span>
           </div>
         </div>
 
         <div className="w-full flex-[3] rounded-xl bg-white p-4 shadow-sm">
-          <p className="mb-4 font-medium">Edit profile</p>
-          <ProfileForm />
+          {profileDetails && (
+            <>
+              <p className="mb-4 font-medium">Edit profile</p>
+              <ProfileForm profileDetails={profileDetails} />
+            </>
+          )}
 
           <p className="mb-4 mt-8 font-medium">Change password</p>
           <ChangePasswordForm />
