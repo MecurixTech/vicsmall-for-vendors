@@ -62,7 +62,47 @@ export default function Dashboard() {
   }
 
   if (!dashboardData) {
-    return <div>No data available</div>;
+    return (
+      <div className="p-4">
+        <div className="grid gap-4 md:grid-cols-12">
+          <Card className="col-span-12 p-4">
+            <h2 className="mb-4 text-2xl font-bold">Daily Sales</h2>
+            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+            <p>No data available</p>
+          </Card>
+
+          <Card className="col-span-12 p-4">
+            <h2 className="mb-4 text-2xl font-bold">Sales by Category</h2>
+            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+            <p>No data available</p>
+          </Card>
+
+          <Card className="col-span-12 p-4">
+            <h2 className="mb-4 text-2xl font-bold">Top Products</h2>
+            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+            <p>No data available</p>
+          </Card>
+
+          <Card className="col-span-12 p-4">
+            <h2 className="mb-4 text-2xl font-bold">Total Revenue</h2>
+            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+            <p className="text-2xl font-bold">₦0</p>
+          </Card>
+
+          <Card className="col-span-12 p-4">
+            <h2 className="mb-4 text-2xl font-bold">Total Products</h2>
+            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+            <p className="text-2xl font-bold">0</p>
+          </Card>
+
+          <Card className="col-span-12 p-4">
+            <h2 className="mb-4 text-2xl font-bold">Total Product Ordered</h2>
+            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+            <p className="text-2xl font-bold">0</p>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   const salesByCategoryData = dashboardData.sales_by_category.map(item => ({
@@ -78,7 +118,6 @@ export default function Dashboard() {
   return (
     <div className="p-4">
       <div className="grid gap-4 md:grid-cols-12">
-
         <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Daily Sales</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
@@ -108,7 +147,6 @@ export default function Dashboard() {
             <p>No top products data available</p>
           )}
         </Card>
-
 
         <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Total Revenue</h2>
