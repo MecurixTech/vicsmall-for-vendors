@@ -3,7 +3,7 @@
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 
 interface BarChartData {
-  category: string;
+  name: string;
   value: number;
 }
 
@@ -16,7 +16,7 @@ export function CustomBarChart({ data }: CustomBarChartProps) {
     <div className="w-full h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
-          <XAxis dataKey="category" />
+          <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Bar dataKey="value" fill="#4ade80" />
