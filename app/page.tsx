@@ -70,7 +70,6 @@ export default function Dashboard() {
           )}
         </Card>
 
-        {/* Sales by Category */}
         <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Sales by Category</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
@@ -81,7 +80,6 @@ export default function Dashboard() {
           )}
         </Card>
 
-        {/* Top Products */}
         <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Top Products</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
@@ -92,21 +90,18 @@ export default function Dashboard() {
           )}
         </Card>
 
-        {/* Total Revenue */}
         <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Total Revenue</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <p className="text-2xl font-bold">${dashboardData.total_revenue}</p>
+          <p className="text-2xl font-bold">₦{dashboardData.total_revenue}</p>
         </Card>
 
-        {/* Total Products */}
-        <Card className="col-span-12 p-4">
+          <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Total Products</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
           <p className="text-2xl font-bold">{dashboardData.total_products}</p>
         </Card>
 
-        {/* Total Product Ordered */}
         <Card className="col-span-12 p-4">
           <h2 className="mb-4 text-2xl font-bold">Total Product Ordered</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>

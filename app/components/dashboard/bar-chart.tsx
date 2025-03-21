@@ -2,7 +2,16 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 
-export function CustomBarChart({ data }) {
+interface BarChartData {
+  category: string;
+  value: number;
+}
+
+interface CustomBarChartProps {
+  data: BarChartData[];
+}
+
+export function CustomBarChart({ data }: CustomBarChartProps) {
   return (
     <div className="w-full h-[300px]">
       <ResponsiveContainer width="100%" height="100%">

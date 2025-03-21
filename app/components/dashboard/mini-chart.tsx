@@ -2,7 +2,16 @@
 
 import { Line, LineChart, ResponsiveContainer, XAxis, Tooltip } from "recharts";
 
-export function MiniChart({ data }) {
+interface LineChartData {
+  day: string;
+  value: number;
+}
+
+interface MiniChartProps {
+  data: LineChartData[];
+}
+
+export function MiniChart({ data }: MiniChartProps) {
   return (
     <div className="w-full max-w-[200px] h-[80px]">
       <ResponsiveContainer width="100%" height="100%">
