@@ -1,154 +1,117 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
-import { Leaderboard } from "../app/components/dashboard/leaderboard";
-import { Component as Danny } from "../app/components/dashboard/danny";
-import { Component as ChartTwo } from "../app/components/dashboard/chart-two";
-import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { MiniChart } from "../app/components/dashboard/mini-chart";
-import { Brand } from "./components/dashboard/brand";
+import { CustomBarChart } from "../app/components/dashboard/bar-chart";
 
 export default function Dashboard() {
   const router = useRouter();
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No authentication token found");
+        }
+
+        const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/dashboard/vendor-dashboard/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        console.log("Dashboard Data:", data);
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch dashboard data");
+        }
+
+        setDashboardData(data.Data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/Sign-in");
     }
   }, [router]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!dashboardData) {
+    return <div>No data available</div>;
+  }
+
   return (
     <div className="p-4">
       <div className="grid gap-4 md:grid-cols-12">
-        {/* First Row - Net Sales (Spans 8 columns) */}
-        <Card className="col-span-6 p-4">
-          <h2 className="mb-4 text-2xl font-bold">User Statistics</h2>
+        {/* Daily Sales */}
+        <Card className="col-span-12 p-4">
+          <h2 className="mb-4 text-2xl font-bold">Daily Sales</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$0</p>
-                <div>
-                  <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500">0%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-            {/* <div className="w-[1px] h-full bg-black "></div> */}
-            <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$0</p>
-                <div>
-                  <TrendingUpIcon sx={{ color: "green" }} fontSize="small" />
-                  <span className="text-xs font-normal text-green-500">
-                    {" "}
-                    0%
-                  </span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-          </div>
+          {dashboardData.daily_sales && dashboardData.daily_sales.length > 0 ? (
+            <MiniChart data={dashboardData.daily_sales} />
+          ) : (
+            <p>No daily sales data available</p>
+          )}
         </Card>
 
-        {/* First Row - User Statistics (Spans 6 columns) */}
-        <Card className="col-span-6 p-4">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Net Sales</h2>
-            <select className="rounded-md border px-2 py-1 text-sm">
-              <option>Week</option>
-              <option>Month</option>
-              <option>Year</option>
-            </select>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4">
-            <Danny />
-          </div>
-        </Card>
-
-        {/* Second Row - Sales Statistics (Spans 6 columns) */}
-        <Card className="col-span-6 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Sales Statistics</h2>
+        {/* Sales by Category */}
+        <Card className="col-span-12 p-4">
+          <h2 className="mb-4 text-2xl font-bold">Sales by Category</h2>
           <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$0</p>
-                <div>
-                  <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500">0%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-            {/* <div className="w-[1px] h-full bg-black "></div> */}
-            <div className="flex gap-2">
-              <div>
-                <p className="text-base font-normal text-muted-foreground">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold">$0</p>
-                <div>
-                  <TrendingDownIcon color="error" fontSize="small" />
-                  <span className="text-xs font-normal text-red-500">0%</span>
-                </div>
-              </div>
-              <MiniChart />
-            </div>
-          </div>
-        </Card>
-        {/* Second Row - Brand Category (Spans 6 columns) */}
-        <Card className="col-span-6 p-4">
-          <ChartTwo />
+          {dashboardData.sales_by_category && dashboardData.sales_by_category.length > 0 ? (
+            <CustomBarChart data={dashboardData.sales_by_category} />
+          ) : (
+            <p>No sales by category data available</p>
+          )}
         </Card>
 
-        {/* Third Row - Leaderboard (Spans 6 columns) */}
-        <Card className="col-span-6">
-          <Leaderboard />
+        {/* Top Products */}
+        <Card className="col-span-12 p-4">
+          <h2 className="mb-4 text-2xl font-bold">Top Products</h2>
+          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+          {dashboardData.top_products && dashboardData.top_products.length > 0 ? (
+            <CustomBarChart data={dashboardData.top_products} />
+          ) : (
+            <p>No top products data available</p>
+          )}
         </Card>
 
-        {/* Third Row - Sales Category and Trending Now (Spans 4 columns) */}
-        <div className="col-span-6 grid grid-rows-1 gap-4">
-          <Card className="p-4">
-            <Brand />
-          </Card>
+        {/* Total Revenue */}
+        <Card className="col-span-12 p-4">
+          <h2 className="mb-4 text-2xl font-bold">Total Revenue</h2>
+          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+          <p className="text-2xl font-bold">${dashboardData.total_revenue}</p>
+        </Card>
 
-          <Card className="">
-            <div className="relative">
-              <Image
-                src="/jacket.jpeg"
-                alt="Wooly Jacket"
-                width={400}
-                height={160}
-                className="h-40 w-full rounded-lg object-cover shadow-sm"
-              />
-              <div className="absolute inset-0 flex flex-col justify-between p-4 text-white">
-                <h2 className="text-lg font-semibold text-white">
-                  Trending now
-                </h2>
-                <div>
-                  <p className="font-semibold">Wooly Jacket</p>
-                  <p className="font-semibold">$144.99</p>
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
+        {/* Total Products */}
+        <Card className="col-span-12 p-4">
+          <h2 className="mb-4 text-2xl font-bold">Total Products</h2>
+          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+          <p className="text-2xl font-bold">{dashboardData.total_products}</p>
+        </Card>
+
+        {/* Total Product Ordered */}
+        <Card className="col-span-12 p-4">
+          <h2 className="mb-4 text-2xl font-bold">Total Product Ordered</h2>
+          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
+          <p className="text-2xl font-bold">{dashboardData.total_product_ordered}</p>
+        </Card>
       </div>
     </div>
   );
