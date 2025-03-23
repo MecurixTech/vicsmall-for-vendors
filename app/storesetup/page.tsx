@@ -31,7 +31,7 @@ export default function StoreSetup() {
       part_payment: partPayment,
       shop_state: shopState,
     };
-
+const shopname = localStorage.setItem("shopName", shopName)
     try {
       const token = localStorage.getItem("token");
       if (!token) {

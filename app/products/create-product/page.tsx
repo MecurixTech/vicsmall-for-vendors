@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import type React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -20,10 +18,8 @@ export default function CreateProductPage() {
     appliances: false,
     accessories: false,
   });
-  const [productType, setProductType] = useState({
-    abroad: false,
-    local: false,
-  });
+  const [selectedShippingClass, setSelectedShippingClass] = useState<string | null>(null);
+  const [selectedProductType, setSelectedProductType] = useState<string | null>(null);
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -57,10 +53,12 @@ export default function CreateProductPage() {
 
   const toggleShippingClass = (key: keyof typeof shippingClasses) => {
     setShippingClasses((prev) => ({ ...prev, [key]: !prev[key] }));
+    setSelectedShippingClass(key);
   };
 
   const toggleProductType = (key: keyof typeof productType) => {
     setProductType((prev) => ({ ...prev, [key]: !prev[key] }));
+    setSelectedProductType(key);
   };
 
   const verifyToken = async () => {
@@ -121,6 +119,8 @@ export default function CreateProductPage() {
       product_visibility: productVisibility,
       product_status: productStatus,
       product_variant: productVariant,
+      shipping_class: selectedShippingClass, 
+      product_type: selectedProductType, 
     };
 
     try {
@@ -145,7 +145,6 @@ export default function CreateProductPage() {
 
       if (response.ok) {
         window.alert("Product created successfully");
-     
         router.push("/products");
       } else {
         const errorData = await response.json();
@@ -157,6 +156,8 @@ export default function CreateProductPage() {
       setIsSubmitting(false);
     }
   };
+
+
   return (
     <div className="bg-[#F9F7F7] min-h-screen pb-16 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">
@@ -200,9 +201,8 @@ export default function CreateProductPage() {
                   </SelectTrigger>
                 
                  <SelectContent>
-  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Clothing</SelectItem>
-  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Electronics</SelectItem>
-  <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Home & Garden</SelectItem>
+  <SelectItem value="b587c20d-c3f6-4b5d-9d9f-2795f669a01b">Clothing</SelectItem>
+  <SelectItem value="b41e74a6-13f5-4277-8474-4a772725a6aa">Electronics</SelectItem>
   <SelectItem value="8284ec4f-7b05-4e16-8eeb-788ed39dcd05">Beauty</SelectItem>
 </SelectContent>
                 </Select>
@@ -218,14 +218,19 @@ export default function CreateProductPage() {
               </div>
             </div>
             <div className="mb-8">
-              <label className="block mb-1 text-base">Variant</label>
-              <Input
-                className="w-full h-[38px] border border-[#D9D9D9] rounded-md bg-white"
-                placeholder="Enter product variant"
-                value={productVariant}
-                onChange={(e) => setProductVariant(e.target.value)}
-              />
-            </div>
+  <label className="block mb-1 text-base">Variant</label>
+  <select
+    className="w-full h-[38px] border border-[#D9D9D9] rounded-md bg-white px-2"
+    value={productVariant}
+    onChange={(e) => setProductVariant(e.target.value)}
+  >
+    <option value="">Select a variant</option>
+    <option value="Black">Black</option>
+    <option value="White">White</option>
+    <option value="Brown">Brown</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
             <div className="mb-8">
               <label className="block mb-1 text-base">
                 Weight <span className="text-red-500">*</span>
@@ -254,9 +259,9 @@ export default function CreateProductPage() {
                 <label className="block mb-1 text-base">
                   Shipping Class <span className="text-red-500">*</span>
                 </label>
-                <Select>
+             <Select onValueChange={(value) => setSelectedShippingClass(value)}>
                   <SelectTrigger className="w-full md:w-[220px] h-[62px] border border-[#D9D9D9] rounded-[10px] bg-white">
-                    <SelectValue placeholder="Shipping Class" />
+                    <SelectValue placeholder={selectedShippingClass || "Shipping Class"} />
                   </SelectTrigger>
                   <SelectContent>
                     <div className="p-2">
@@ -296,19 +301,20 @@ export default function CreateProductPage() {
                   </SelectContent>
                 </Select>
               </div>
+              
               <div>
                 <label className="block mb-1 text-base invisible md:visible">.</label>
-                <Select>
+                <Select onValueChange={(value) => setSelectedProductType(value)}>
                   <SelectTrigger className="w-full md:w-[223px] h-[62px] border border-[#D9D9D9] rounded-[10px] bg-white">
-                    <SelectValue placeholder="Is the product?" />
+                    <SelectValue placeholder={selectedProductType || "Is the product?"} />
                   </SelectTrigger>
                   <SelectContent>
                     <div className="p-2">
                       <div className="flex items-center space-x-2 py-1">
                         <Checkbox
                           id="abroad"
-                          checked={productType.abroad}
-                          onCheckedChange={() => toggleProductType("abroad")}
+                          checked={selectedProductType === "abroad"}
+                          onCheckedChange={() => setSelectedProductType("abroad")}
                         />
                         <label htmlFor="abroad" className="text-sm">
                           Abroad Product
@@ -318,8 +324,8 @@ export default function CreateProductPage() {
                       <div className="flex items-center space-x-2 py-1">
                         <Checkbox
                           id="local"
-                          checked={productType.local}
-                          onCheckedChange={() => toggleProductType("local")}
+                          checked={selectedProductType === "local"}
+                          onCheckedChange={() => setSelectedProductType("local")}
                         />
                         <label htmlFor="local" className="text-sm">
                           Local Product

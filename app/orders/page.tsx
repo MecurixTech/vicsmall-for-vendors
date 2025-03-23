@@ -44,7 +44,7 @@ const OrdersPage = () => {
   useEffect(() => {
     const loadingOrders = toast.loading("Fetching your orders...");
     axios
-      .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/shop/vendor/all-order`, {
+      .get(`https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor/all-order`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
@@ -105,7 +105,7 @@ const OrdersPage = () => {
                     ).length
                   }
                 </div>
-                <div className="text-xs opacity-70">COMPLETED</div>
+                <div className="text-[10px] opacity-70 lg:text-xs">COMPLETED</div>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
@@ -127,13 +127,25 @@ const OrdersPage = () => {
       </Card>
 
       <div className="rounded-lg bg-white p-6">
-        <div className="mb-6 flex items-center gap-4 text-sm text-gray-500">
-          <span>ALL ORDERS (250)</span>
-          <span>DELIVERED (120)</span>
-          <span>PICKUP (80)</span>
-          <span>CANCELED (34)</span>
+        <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-gray-500">
+          <span>ALL ORDERS ({orders.length})</span>
+          <span>
+            DELIVERED (
+            {orders.filter((order: Order) => order.status.toLowerCase() === "completed").length}
+            )
+          </span>
+          <span>
+            PICKUP (
+            {orders.filter((order: Order) => order.status.toLowerCase() === "pickup").length}
+            )
+          </span>
+          <span>
+            CANCELED (
+            {orders.filter((order: Order) => order.status.toLowerCase() === "canceled").length}
+            )
+          </span>
         </div>
-        <div className="rounded-md border">
+        <div className="overflow-x-auto rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -170,8 +182,8 @@ const OrdersPage = () => {
                         order.status === "pending"
                           ? "bg-purple-100 text-purple-700"
                           : order.status === "completed"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
                       }`}
                     >
                       {order.status.charAt(0).toUpperCase() +
