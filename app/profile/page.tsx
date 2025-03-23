@@ -9,6 +9,7 @@ const Profile = () => {
   const accessToken =
     (typeof window !== "undefined" && localStorage.getItem("token")) || "";
 
+  // State to manage profile details
   const [profileDetails, setProfileDetails] = useState({
     id: "",
     email: "",
@@ -19,6 +20,20 @@ const Profile = () => {
     is_vendor: false,
   });
 
+  // Load existing profile details from localStorage
+  useEffect(() => {
+    setProfileDetails({
+      id: "",
+      email: localStorage.getItem("email") || "",
+      full_name: localStorage.getItem("fullName") || "",
+      phone_number: localStorage.getItem("phoneNumber") || "",
+      about_me: localStorage.getItem("aboutMe") || "",
+      store_name: localStorage.getItem("shopName") || "",
+      is_vendor: false,
+    });
+  }, []);
+
+  // Fetch profile from API
   useEffect(() => {
     const loadingProfile = toast.loading("Loading user profile...");
 
@@ -27,30 +42,41 @@ const Profile = () => {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .then((res) => {
-        console.log(res);
         toast.dismiss(loadingProfile);
         if (res.status === 200) {
           setProfileDetails(res.data.Data);
           toast.success(res.data.Message);
+
+          // Save fetched data to localStorage
+          localStorage.setItem("fullName", res.data.Data.full_name);
+          localStorage.setItem("phoneNumber", res.data.Data.phone_number);
+          localStorage.setItem("aboutMe", res.data.Data.about_me);
+          localStorage.setItem("shopName", res.data.Data.store_name);
+          localStorage.setItem("email", res.data.Data.email);
         } else {
           toast.error(res.data.Message);
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         toast.error("An error occurred!");
       })
       .finally(() => toast.dismiss(loadingProfile));
   }, [accessToken]);
 
+  // Handle input changes and update state + localStorage
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setProfileDetails((prevDetails) => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    setProfileDetails((prevDetails) => {
+      const updatedDetails = { ...prevDetails, [name]: value };
+
+      // Sync changes to localStorage
+      localStorage.setItem(name, value);
+
+      return updatedDetails;
+    });
   };
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const loadingUpdate = toast.loading("Updating profile...");
@@ -69,21 +95,22 @@ const Profile = () => {
         }
       )
       .then((res) => {
-        console.log(res);
         toast.dismiss(loadingUpdate);
         if (res.status === 200) {
           setProfileDetails(res.data.Data);
           toast.success("Profile updated successfully");
-          // Save updated store_name to local storage
-          if (typeof window !== "undefined") {
-            localStorage.setItem("shopName", res.data.Data.store_name);
-          }
+
+          // Update localStorage after successful API update
+          localStorage.setItem("fullName", res.data.Data.full_name);
+          localStorage.setItem("phoneNumber", res.data.Data.phone_number);
+          localStorage.setItem("aboutMe", res.data.Data.about_me);
+          localStorage.setItem("shopName", res.data.Data.store_name);
+          localStorage.setItem("email", res.data.Data.email);
         } else {
           toast.error(res.data.Message);
         }
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(() => {
         toast.error("An error occurred!");
       })
       .finally(() => toast.dismiss(loadingUpdate));
@@ -102,52 +129,42 @@ const Profile = () => {
           <div className="mb-4 flex items-center gap-2">
             <Image
               src="https://utfs.io/f/wLDjZbdcJHpRMWIl9NP3i48NTabVkLgSlduGEY15BDA9eZjR"
-              alt="John Doe"
+              alt="User Profile"
               height={48}
               width={48}
               className="h-12 w-12 rounded-full"
             />
             <div>
-              <span className="text-xs sm:block">
-                {profileDetails?.full_name}
-              </span>
+              <span className="text-xs sm:block">{profileDetails.full_name}</span>
               <p className="text-xs text-gray-400">Vendor</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>STORE NAME</span>
-            <span className="text-right">{profileDetails?.store_name}</span>
+            <span className="text-right">{profileDetails.store_name}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>PHONE NUMBER</span>
-            <span className="text-xs sm:block">
-              {profileDetails?.phone_number}
-            </span>
+            <span className="text-xs sm:block">{profileDetails.phone_number}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>ABOUT ME</span>
-            <span className="text-xs sm:block">
-              {profileDetails?.about_me}
-            </span>
+            <span className="text-xs sm:block">{profileDetails.about_me}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 pt-3">
             <span>EMAIL ADDRESS</span>
-            <span className="text-right text-xs sm:block">
-              {profileDetails?.email}
-            </span>
+            <span className="text-right text-xs sm:block">{profileDetails.email}</span>
           </div>
         </div>
 
         <div className="w-full flex-[3] rounded-xl bg-white p-4 shadow-sm">
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Full Name</label>
               <input
                 type="text"
                 name="full_name"
@@ -158,9 +175,7 @@ const Profile = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Phone Number
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
               <input
                 type="text"
                 name="phone_number"
@@ -171,9 +186,7 @@ const Profile = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                About Me
-              </label>
+              <label className="block text-sm font-medium text-gray-700">About Me</label>
               <textarea
                 name="about_me"
                 value={profileDetails.about_me}
@@ -183,9 +196,7 @@ const Profile = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Store Name
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Store Name</label>
               <input
                 type="text"
                 name="store_name"
@@ -195,10 +206,7 @@ const Profile = () => {
               />
             </div>
 
-            <button
-              type="submit"
-              className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-            >
+            <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded-md">
               Save Changes
             </button>
           </form>
