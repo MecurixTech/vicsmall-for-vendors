@@ -52,9 +52,10 @@ const Profile = () => {
   };
 const shop_name = localStorage.getItem("shopName")
 const aboutme = localStorage.getItem("aboutMe")
-  const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const loadingUpdate = toast.loading("Updating profile...");
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  const loadingUpdate = toast.loading("Updating profile...");
+};
 
     axios
       .patch(
