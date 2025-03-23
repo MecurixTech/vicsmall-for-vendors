@@ -56,10 +56,6 @@ export default function CreateProductPage() {
     setSelectedShippingClass(key);
   };
 
-  const toggleProductType = (key: keyof typeof productType) => {
-    setProductType((prev) => ({ ...prev, [key]: !prev[key] }));
-    setSelectedProductType(key);
-  };
 
   const verifyToken = async () => {
     try {
