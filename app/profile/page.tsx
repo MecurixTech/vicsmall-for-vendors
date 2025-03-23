@@ -43,18 +43,22 @@ const Profile = () => {
       .finally(() => toast.dismiss(loadingProfile));
   }, [accessToken]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setProfileDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
   };
-const shop_name = localStorage.getItem("shopName")
-const aboutme = localStorage.getItem("aboutMe")
-  const handleSubmit = (e) => {
+  
+  const shop_name = localStorage.getItem("shopName");
+  const aboutme = localStorage.getItem("aboutMe");
+  
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const loadingUpdate = toast.loading("Updating profile...");
+  };
+  
 
     axios
       .patch(
