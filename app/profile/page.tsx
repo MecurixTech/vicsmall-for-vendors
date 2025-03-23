@@ -18,8 +18,7 @@ const Profile = () => {
     store_name: "",
     is_vendor: false,
   });
-  const shop_name = localStorage.getItem("shopName");
-  const aboutme = localStorage.getItem("aboutMe");
+
   useEffect(() => {
     const loadingProfile = toast.loading("Loading user profile...");
 
@@ -76,7 +75,9 @@ const Profile = () => {
           setProfileDetails(res.data.Data);
           toast.success("Profile updated successfully");
           // Save updated store_name to local storage
-          localStorage.setItem("shopName", res.data.Data.store_name);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("shopName", res.data.Data.store_name);
+          }
         } else {
           toast.error(res.data.Message);
         }
@@ -116,7 +117,7 @@ const Profile = () => {
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>STORE NAME</span>
-            <span className="text-right">{shop_name}</span>
+            <span className="text-right">{profileDetails?.store_name}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-b py-3">
@@ -129,7 +130,7 @@ const Profile = () => {
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>ABOUT ME</span>
             <span className="text-xs sm:block">
-              {aboutme}
+              {profileDetails?.about_me}
             </span>
           </div>
 
