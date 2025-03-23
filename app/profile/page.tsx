@@ -18,7 +18,8 @@ const Profile = () => {
     store_name: "",
     is_vendor: false,
   });
-
+  const shop_name = localStorage.getItem("shopName");
+  const aboutme = localStorage.getItem("aboutMe");
   useEffect(() => {
     const loadingProfile = toast.loading("Loading user profile...");
 
@@ -43,19 +44,17 @@ const Profile = () => {
       .finally(() => toast.dismiss(loadingProfile));
   }, [accessToken]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setProfileDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
   };
-const shop_name = localStorage.getItem("shopName")
-const aboutme = localStorage.getItem("aboutMe")
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  const loadingUpdate = toast.loading("Updating profile...");
-};
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const loadingUpdate = toast.loading("Updating profile...");
 
     axios
       .patch(
@@ -130,7 +129,7 @@ const handleSubmit = (e: React.FormEvent) => {
           <div className="flex items-center justify-between gap-4 border-b py-3">
             <span>ABOUT ME</span>
             <span className="text-xs sm:block">
-              {profileDetails?.about_me}
+              {aboutme}
             </span>
           </div>
 
@@ -176,7 +175,7 @@ const handleSubmit = (e: React.FormEvent) => {
               </label>
               <textarea
                 name="about_me"
-                value={aboutme} 
+                value={profileDetails.about_me}
                 onChange={handleInputChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
@@ -189,7 +188,7 @@ const handleSubmit = (e: React.FormEvent) => {
               <input
                 type="text"
                 name="store_name"
-                value={shop_name}
+                value={profileDetails.store_name}
                 onChange={handleInputChange}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               />
