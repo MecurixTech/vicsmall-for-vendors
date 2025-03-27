@@ -3,6 +3,7 @@
 import {
   DeleteOutlined,
   FilterAltOutlined,
+  LoopOutlined,
   MenuOutlined,
   SearchOutlined,
   WindowOutlined,
@@ -76,7 +77,11 @@ const Products = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="grid h-[50vh] place-content-center">
+        <LoopOutlined fontSize="large" className="animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -182,7 +187,9 @@ const Products = () => {
                         </Link>
                       </td>
                       <td>{product.product_sale_price}</td>
-                      <td className="capitalize">{categoryMapping[product.category] || product.category}</td>
+                      <td className="capitalize">
+                        {categoryMapping[product.category] || product.category}
+                      </td>
                       <td>
                         <span
                           className={`${product.product_status ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
@@ -226,7 +233,8 @@ const Products = () => {
                   <div className="p-2 text-sm">
                     <p className="font-medium">{product.product_name}</p>
                     <p className="text-gray-400">
-                      Category: {categoryMapping[product.category] || product.category}
+                      Category:{" "}
+                      {categoryMapping[product.category] || product.category}
                     </p>
                     <div className="flex items-center justify-between">
                       <span>
