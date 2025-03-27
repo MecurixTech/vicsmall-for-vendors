@@ -1,171 +1,98 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
-import { MiniChart } from "../app/components/dashboard/mini-chart";
-import { CustomBarChart } from "../app/components/dashboard/bar-chart";
-
-interface DashboardData {
-  daily_sales: { day: string; value: number }[];
-  sales_by_category: { category: string; value: number }[];
-  top_products: { product: string; value: number }[];
-  total_product_ordered: number;
-  total_products: number;
-  total_revenue: number;
-}
+import toast from "react-hot-toast";
+import axios from "axios";
+import {
+  Inventory2Outlined,
+  ListAltOutlined,
+  LocalAtmOutlined,
+  LoopOutlined,
+} from "@mui/icons-material";
+import { Dashboard as DashboardType } from "./data/dummyTypes";
 
 export default function Dashboard() {
-  const router = useRouter();
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const token =
+    (typeof window !== "undefined" && localStorage.getItem("token")) || "";
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-
-        const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/dashboard/vendor-dashboard/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-        console.log("Dashboard Data:", data);
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch dashboard data");
-        }
-
-        setDashboardData(data.Data);
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-    const token = localStorage.getItem("token");
+    console.log(token);
     if (!token) {
-      router.push("/Sign-in");
+      redirect("/Sign-in");
     }
-  }, [router]);
+  }, [token]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const [dashboard, setDashboard] = useState<DashboardType>();
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!dashboardData) {
+  useEffect(() => {
+    const loadingDashboard = toast.loading("Loading dashboard details...");
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/dashboard/vendor-dashboard/`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
+      .then((res) => {
+        console.log(res);
+        setIsLoading(false);
+        setDashboard(res.data.Data);
+        toast.dismiss(loadingDashboard);
+        if (res.status === 200) {
+          toast.success(res.data.Message);
+        } else {
+          toast.error(res.data.Message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("An error occurred!");
+      })
+      .finally(() => {
+        setIsLoading(false);
+        toast.dismiss(loadingDashboard);
+      });
+  }, []);
+
+  if (isLoading) {
     return (
-      <div className="p-4">
-        <div className="grid gap-4 md:grid-cols-12">
-          <Card className="col-span-12 p-4">
-            <h2 className="mb-4 text-2xl font-bold">Daily Sales</h2>
-            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-            <p>No data available</p>
-          </Card>
-
-          <Card className="col-span-12 p-4">
-            <h2 className="mb-4 text-2xl font-bold">Sales by Category</h2>
-            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-            <p>No data available</p>
-          </Card>
-
-          <Card className="col-span-12 p-4">
-            <h2 className="mb-4 text-2xl font-bold">Top Products</h2>
-            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-            <p>No data available</p>
-          </Card>
-
-          <Card className="col-span-12 p-4">
-            <h2 className="mb-4 text-2xl font-bold">Total Revenue</h2>
-            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-            <p className="text-2xl font-bold">₦0</p>
-          </Card>
-
-          <Card className="col-span-12 p-4">
-            <h2 className="mb-4 text-2xl font-bold">Total Products</h2>
-            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-            <p className="text-2xl font-bold">0</p>
-          </Card>
-
-          <Card className="col-span-12 p-4">
-            <h2 className="mb-4 text-2xl font-bold">Total Product Ordered</h2>
-            <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-            <p className="text-2xl font-bold">0</p>
-          </Card>
-        </div>
+      <div className="grid h-[50vh] place-content-center">
+        <LoopOutlined fontSize="large" className="animate-spin" />
       </div>
     );
+  } else {
+    return (
+      <>
+        <h1 className="mb-4 text-3xl">Dashboard</h1>
+        <div className="flex flex-wrap gap-4">
+          <Card className="min-w-48 flex-grow p-4">
+            <p className="text-3xl font-bold">${dashboard?.total_revenue}</p>
+            <hr className="my-2" />
+            <h2 className="flex items-center gap-2 text-base font-normal">
+              <LocalAtmOutlined />
+              <span>Total revenue</span>
+            </h2>
+          </Card>
+          <Card className="min-w-48 flex-grow p-4">
+            <p className="text-3xl font-bold">{dashboard?.total_products}</p>
+            <hr className="my-2" />
+            <h2 className="flex items-center gap-2 text-base font-normal">
+              <Inventory2Outlined />
+              <span>Total products</span>
+            </h2>
+          </Card>
+          <Card className="min-w-48 flex-grow p-4">
+            <p className="text-3xl font-bold">
+              {dashboard?.total_product_ordered}
+            </p>
+            <hr className="my-2" />
+            <h2 className="flex items-center gap-2 text-base font-normal">
+              <ListAltOutlined />
+              <span>Total orders</span>
+            </h2>
+          </Card>
+        </div>
+      </>
+    );
   }
-
-  const salesByCategoryData = dashboardData.sales_by_category.map(item => ({
-    name: item.category,
-    value: item.value,
-  }));
-
-  const topProductsData = dashboardData.top_products.map(item => ({
-    name: item.product,
-    value: item.value,
-  }));
-
-  return (
-    <div className="p-4">
-      <div className="grid gap-4 md:grid-cols-12">
-        <Card className="col-span-12 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Daily Sales</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          {dashboardData.daily_sales && dashboardData.daily_sales.length > 0 ? (
-            <MiniChart data={dashboardData.daily_sales} />
-          ) : (
-            <p>No daily sales data available</p>
-          )}
-        </Card>
-
-        <Card className="col-span-12 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Sales by Category</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          {dashboardData.sales_by_category && dashboardData.sales_by_category.length > 0 ? (
-            <CustomBarChart data={salesByCategoryData} />
-          ) : (
-            <p>No sales by category data available</p>
-          )}
-        </Card>
-
-        <Card className="col-span-12 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Top Products</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          {dashboardData.top_products && dashboardData.top_products.length > 0 ? (
-            <CustomBarChart data={topProductsData} />
-          ) : (
-            <p>No top products data available</p>
-          )}
-        </Card>
-
-        <Card className="col-span-12 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Total Revenue</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <p className="text-2xl font-bold">₦{dashboardData.total_revenue}</p>
-        </Card>
-
-        <Card className="col-span-12 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Total Products</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <p className="text-2xl font-bold">{dashboardData.total_products}</p>
-        </Card>
-
-        <Card className="col-span-12 p-4">
-          <h2 className="mb-4 text-2xl font-bold">Total Product Ordered</h2>
-          <div className="mb-10 h-[1px] w-full bg-[#D9D9D9]"></div>
-          <p className="text-2xl font-bold">{dashboardData.total_product_ordered}</p>
-        </Card>
-      </div>
-    </div>
-  );
 }

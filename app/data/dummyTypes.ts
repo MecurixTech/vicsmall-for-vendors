@@ -32,3 +32,12 @@ export type Order = {
   status: string;
   created_at: string;
 };
+
+export type Dashboard = {
+  total_product_ordered: number;
+  total_revenue: number;
+  sales_by_category: [];
+  top_products: [];
+  daily_sales: [];
+  total_products: number;
+};
