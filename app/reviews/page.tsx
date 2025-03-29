@@ -14,7 +14,7 @@ const Reviews = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    const loadingReviews = toast.loading("Fetching your orders...");
+    const loadingReviews = toast.loading("Fetching your reviews...");
     axios
       .get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/shop/vendor/all_customer_review`,
