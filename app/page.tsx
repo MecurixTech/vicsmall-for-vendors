@@ -11,6 +11,14 @@ import {
   LoopOutlined,
 } from "@mui/icons-material";
 import { Dashboard as DashboardType } from "./data/dummyTypes";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 export default function Dashboard() {
   const token =
@@ -64,7 +72,7 @@ export default function Dashboard() {
     return (
       <>
         <h1 className="mb-4 text-3xl">Dashboard</h1>
-        <div className="flex flex-wrap gap-4">
+        <div className="mb-4 flex flex-wrap gap-4">
           <Card className="min-w-48 flex-grow p-4">
             <p className="text-3xl font-bold">${dashboard?.total_revenue}</p>
             <hr className="my-2" />
@@ -92,6 +100,72 @@ export default function Dashboard() {
             </h2>
           </Card>
         </div>
+
+        <Card className="mb-4 p-4">
+          <h2 className="mb-2 text-2xl">Daily sales</h2>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Total sales</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dashboard?.daily_sales.map((item) => (
+                  <TableRow>
+                    <TableCell>{item.date}</TableCell>
+                    <TableCell>{item.total_sales}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+
+        <Card className="mb-4 p-4">
+          <h2 className="mb-2 text-2xl">Sales by category</h2>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Total sales</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dashboard?.sales_by_category.map((item) => (
+                  <TableRow>
+                    <TableCell>{item.category_name}</TableCell>
+                    <TableCell>{item.total_sales}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
+
+        <Card className="p-4">
+          <h2 className="mb-2 text-2xl">Top products</h2>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Product name</TableCell>
+                  <TableCell>Total sales</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dashboard?.top_products.map((item) => (
+                  <TableRow>
+                    <TableCell>{item.product_name}</TableCell>
+                    <TableCell>{item.total_sales}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
       </>
     );
   }

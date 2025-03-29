@@ -12,6 +12,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Filters from "../components/products/filters";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { redirect } from "next/navigation";
 
 interface Product {
   id: string;
@@ -36,19 +39,49 @@ const categoryMapping: { [key: string]: string } = {
 };
 
 const Products = () => {
+  const token =
+    (typeof window !== "undefined" && localStorage.getItem("token")) || "";
+
+  useEffect(() => {
+    console.log(token);
+    if (!token) {
+      redirect("/Sign-in");
+    }
+  }, [token]);
+
   const [isInListView, setIsInListView] = useState<boolean>(true);
   const [isShowingFilters, setIsShowingFilters] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const handleDeleteProduct = (id: string) => {
+    const deletingProduct = toast.loading("Deleting this product...");
+
+    axios
+      .delete(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/shop/vendor-product/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } },
+      )
+      .then((res) => {
+        console.log(res);
+        toast.dismiss(deletingProduct);
+        if (res.status === 200) {
+          toast.success(res.data.Message);
+          window.location.reload();
+        } else {
+          toast.error(res.data.Message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.dismiss(deletingProduct);
+        toast.error("An error occured");
+      });
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-
         const response = await fetch(
           "https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-products",
           {
@@ -203,7 +236,9 @@ const Products = () => {
                         {new Date(product.created_at).toLocaleDateString()}
                       </td>
                       <td>
-                        <DeleteOutlined />
+                        <button onClick={() => handleDeleteProduct(product.id)}>
+                          <DeleteOutlined />
+                        </button>
                       </td>
                     </tr>
                   ))}

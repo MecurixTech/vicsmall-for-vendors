@@ -33,11 +33,26 @@ export type Order = {
   created_at: string;
 };
 
+type DailySale = {
+  date: string;
+  total_sales: number;
+};
+
+type SaleByCategory = {
+  category_name: string;
+  total_sales: number;
+};
+
+type TopProduct = {
+  product_name: string;
+  total_sales: number;
+};
+
 export type Dashboard = {
   total_product_ordered: number;
   total_revenue: number;
-  sales_by_category: [];
-  top_products: [];
-  daily_sales: [];
+  sales_by_category: SaleByCategory[];
+  top_products: TopProduct[];
+  daily_sales: DailySale[];
   total_products: number;
 };
