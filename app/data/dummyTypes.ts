@@ -56,3 +56,32 @@ export type Dashboard = {
   daily_sales: DailySale[];
   total_products: number;
 };
+
+type Product = {
+  product_id: string;
+  items: [
+    {
+      product_image: string;
+    },
+  ];
+  product_name: string;
+  product_description: string;
+  product_tags: string;
+  product_sale_price: string;
+  product_regular_price: string;
+  product_visibility: boolean;
+  product_status: boolean;
+  product_variant: string;
+  created_at: string;
+  updated_at: string;
+  product_shop: string;
+  category: string;
+};
+
+export type OrderDetails = {
+  order: number;
+  product: string;
+  quantity: number;
+  price: string;
+  product_details?: Product;
+};
