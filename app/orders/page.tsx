@@ -18,6 +18,8 @@ import {
   CheckCircleOutline,
   MoreVert,
   Close,
+  CancelOutlined,
+  ListAltOutlined,
 } from "@mui/icons-material";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -44,9 +46,12 @@ const OrdersPage = () => {
   useEffect(() => {
     const loadingOrders = toast.loading("Fetching your orders...");
     axios
-      .get(`https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor/all-order`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+      .get(
+        `https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor/all-order`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      )
       .then((res) => {
         console.log(res);
         toast.dismiss(loadingOrders);
@@ -74,7 +79,7 @@ const OrdersPage = () => {
           </h2>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
-              <Assignment className="h-5 w-5" />
+              <ListAltOutlined className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">{orders.length}</div>
                 <div className="text-xs opacity-70">ALL ORDERS</div>
@@ -105,11 +110,13 @@ const OrdersPage = () => {
                     ).length
                   }
                 </div>
-                <div className="text-[10px] opacity-70 lg:text-xs">COMPLETED</div>
+                <div className="text-[10px] opacity-70 lg:text-xs">
+                  COMPLETED
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
-              <Close className="h-5 w-5" />
+              <CancelOutlined className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">
                   {
@@ -119,7 +126,7 @@ const OrdersPage = () => {
                     ).length
                   }
                 </div>
-                <div className="text-xs opacity-70">PROGRESS</div>
+                <div className="text-xs opacity-70">CANCELLED</div>
               </div>
             </div>
           </div>
@@ -131,17 +138,29 @@ const OrdersPage = () => {
           <span>ALL ORDERS ({orders.length})</span>
           <span>
             DELIVERED (
-            {orders.filter((order: Order) => order.status.toLowerCase() === "completed").length}
+            {
+              orders.filter(
+                (order: Order) => order.status.toLowerCase() === "completed",
+              ).length
+            }
             )
           </span>
           <span>
             PICKUP (
-            {orders.filter((order: Order) => order.status.toLowerCase() === "pickup").length}
+            {
+              orders.filter(
+                (order: Order) => order.status.toLowerCase() === "pickup",
+              ).length
+            }
             )
           </span>
           <span>
             CANCELED (
-            {orders.filter((order: Order) => order.status.toLowerCase() === "canceled").length}
+            {
+              orders.filter(
+                (order: Order) => order.status.toLowerCase() === "canceled",
+              ).length
+            }
             )
           </span>
         </div>
@@ -168,7 +187,7 @@ const OrdersPage = () => {
                   </TableCell>
                   <TableCell className="font-medium">
                     <Link
-                      href={`orders/${order.order_id.slice(1, 8)}`}
+                      href={`orders/${order.order_id.slice(6)}`}
                       className="hover:underline"
                     >
                       {order.order_id}
@@ -182,18 +201,13 @@ const OrdersPage = () => {
                         order.status === "pending"
                           ? "bg-purple-100 text-purple-700"
                           : order.status === "completed"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
                       }`}
                     >
                       {order.status.charAt(0).toUpperCase() +
                         order.status.slice(1)}
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="ghost" size="icon">
-                      <MoreVert className="h-4 w-4" />
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
