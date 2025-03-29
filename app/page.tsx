@@ -112,8 +112,8 @@ export default function Dashboard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dashboard?.daily_sales.map((item) => (
-                  <TableRow>
+                {dashboard?.daily_sales.map((item, index) => (
+                  <TableRow key={index}>
                     <TableCell>{item.date}</TableCell>
                     <TableCell>{item.total_sales}</TableCell>
                   </TableRow>
@@ -134,8 +134,8 @@ export default function Dashboard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dashboard?.sales_by_category.map((item) => (
-                  <TableRow>
+                {dashboard?.sales_by_category.map((item, index) => (
+                  <TableRow key={index}>
                     <TableCell>{item.category_name}</TableCell>
                     <TableCell>{item.total_sales}</TableCell>
                   </TableRow>
@@ -156,8 +156,8 @@ export default function Dashboard() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dashboard?.top_products.map((item) => (
-                  <TableRow>
+                {dashboard?.top_products.map((item, index) => (
+                  <TableRow key={index}>
                     <TableCell>{item.product_name}</TableCell>
                     <TableCell>{item.total_sales}</TableCell>
                   </TableRow>
