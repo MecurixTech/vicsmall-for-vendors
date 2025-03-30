@@ -32,3 +32,56 @@ export type Order = {
   status: string;
   created_at: string;
 };
+
+type DailySale = {
+  date: string;
+  total_sales: number;
+};
+
+type SaleByCategory = {
+  category_name: string;
+  total_sales: number;
+};
+
+type TopProduct = {
+  product_name: string;
+  total_sales: number;
+};
+
+export type Dashboard = {
+  total_product_ordered: number;
+  total_revenue: number;
+  sales_by_category: SaleByCategory[];
+  top_products: TopProduct[];
+  daily_sales: DailySale[];
+  total_products: number;
+};
+
+type Product = {
+  product_id: string;
+  items: [
+    {
+      product_image: string;
+    },
+  ];
+  product_name: string;
+  product_description: string;
+  product_tags: string;
+  product_sale_price: string;
+  product_regular_price: string;
+  product_visibility: boolean;
+  product_status: boolean;
+  product_variant: string;
+  created_at: string;
+  updated_at: string;
+  product_shop: string;
+  category: string;
+};
+
+export type OrderDetails = {
+  order: number;
+  product: string;
+  quantity: number;
+  price: string;
+  product_details?: Product;
+};

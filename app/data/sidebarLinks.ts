@@ -1,7 +1,6 @@
 import {
   DashboardOutlined,
   Inventory2Outlined,
-  LogoutOutlined,
   PersonOutlined,
   RateReviewOutlined,
   ShoppingBagOutlined,
@@ -37,12 +36,6 @@ export const sidebarLinks = [
     label: "Profile",
     href: "/profile",
     icon: PersonOutlined,
-  },
-  {
-    id: 5,
-    label: "Logout",
-    href: "/Sign-in",
-    icon: LogoutOutlined,
   },
 ];
 

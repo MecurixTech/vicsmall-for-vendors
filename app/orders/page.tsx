@@ -6,12 +6,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import {
-  Assignment,
   AccessTime,
   CheckCircleOutline,
   MoreVert,
   Close,
   ShoppingBag,
+  ListAltOutlined,
+  Assignment,
+  CancelOutlined,
 } from "@mui/icons-material"
 import Link from "next/link"
 import toast from "react-hot-toast"
@@ -185,7 +187,7 @@ const OrdersPage = () => {
           <h2 className="mb-4 text-lg font-semibold text-white">ORDER STATUS</h2>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
-              <Assignment className="h-5 w-5" />
+              <ListAltOutlined className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">{orders.length}</div>
                 <div className="text-xs opacity-70">ALL ORDERS</div>
@@ -210,12 +212,12 @@ const OrdersPage = () => {
               </div>
             </div>
             <div className="flex items-center gap-4 rounded-lg bg-white/10 p-4">
-              <Close className="h-5 w-5" />
+              <CancelOutlined className="h-5 w-5" />
               <div>
                 <div className="text-2xl font-bold">
                   {orders.filter((order: Order) => order.status.toLowerCase() === "canceled").length}
                 </div>
-                <div className="text-xs opacity-70">PROGRESS</div>
+                <div className="text-xs opacity-70">CANCELLED</div>
               </div>
             </div>
           </div>
@@ -269,11 +271,6 @@ const OrdersPage = () => {
                     >
                       {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="ghost" size="icon">
-                      <MoreVert className="h-4 w-4" />
-                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
