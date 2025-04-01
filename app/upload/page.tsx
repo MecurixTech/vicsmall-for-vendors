@@ -6,6 +6,7 @@ import InsertDriveFile from "@mui/icons-material/InsertDriveFile";
 import type React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/lib/constants";
 
 export default function Upload() {
   const [validId, setValidId] = useState<File | null>(null);
@@ -41,7 +42,7 @@ export default function Upload() {
         formData.append("doc_type", "valid_id");
         formData.append("file", validId);
 
-        const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-documents", {
+        const response = await fetch(`${API_BASE_URL}/shop/vendor-documents`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -62,7 +63,7 @@ export default function Upload() {
         formData.append("doc_type", "business_logo");
         formData.append("file", businessLogo);
 
-        const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-documents", {
+        const response = await fetch(`${API_BASE_URL}/shop/vendor-documents`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${token}`,

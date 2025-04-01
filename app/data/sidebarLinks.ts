@@ -1,14 +1,14 @@
 import {
   DashboardOutlined,
   Inventory2Outlined,
-  LogoutOutlined,
   PersonOutlined,
   RateReviewOutlined,
   ShoppingBagOutlined,
 } from "@mui/icons-material";
+import BagIcon from "public/bag-2.svg";
 
 export const sidebarLinks = [
-  {
+  { 
     id: 0,
     label: "Dashboard",
     href: "/",
@@ -37,13 +37,7 @@ export const sidebarLinks = [
     label: "Profile",
     href: "/profile",
     icon: PersonOutlined,
-  },
-  {
-    id: 5,
-    label: "Logout",
-    href: "/Sign-in",
-    icon: LogoutOutlined,
-  },
+  }
 ];
 
 export default sidebarLinks;
