@@ -28,9 +28,10 @@ const Tabs = () => {
 
       <button
         className="rounded-xl bg-red-100 px-3 py-1 font-medium text-red-500"
-        onClick={handleLogout}
-      >
-        Logout
+             >
+<Link href="/Sign-in" className="flex items-center gap-2">
+    <span className="font-medium">Logout</span>
+  </Link>
       </button>
     </nav>
   );
