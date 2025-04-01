@@ -63,7 +63,7 @@ const Sidebar = () => {
           onClick={handleLogout}
           className="mb-2 flex items-center gap-2 rounded-xl border border-[rgba(0,0,0,0.09)] p-3 text-[#555555]"
         >
-      <Link href="/Sign-Up" className="flex items-center gap-2">
+      <Link href="/Sign-in" className="flex items-center gap-2">
     <span className="font-medium">Logout</span>
   </Link>
         </button>
