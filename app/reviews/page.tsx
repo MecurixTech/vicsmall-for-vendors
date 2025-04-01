@@ -105,7 +105,7 @@ const Reviews = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            You haven`&apos;`t received any customer reviews yet. Reviews will appear here once customers start rating your
+            You haven&apos;t received any customer reviews yet. Reviews will appear here once customers start rating your
             products.
           </motion.p>
 

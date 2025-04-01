@@ -10,7 +10,6 @@ import {
   EditOutlined,
   Inventory2Outlined,
   LocalOfferOutlined,
-  DeleteOutlined,
   SaveOutlined,
   CancelOutlined,
   AddPhotoAlternate,
@@ -53,7 +52,6 @@ const fixImageUrl = (url: string): string => {
   if (!url) return "/placeholder.svg"
 
   if (url.startsWith("image/upload/") && url.includes("https://")) {
-    
     const fixedUrl = url.substring(url.indexOf("https://"))
     console.log(`Fixed malformed URL: ${url} -> ${fixedUrl}`)
     return fixedUrl
@@ -85,6 +83,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
   const [newImageFiles, setNewImageFiles] = useState<File[]>([])
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+  const [imagesToKeep, setImagesToKeep] = useState<string[]>([])
 
   const product = productResponse?.Data || null
 
@@ -128,8 +127,6 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
           console.error("No authentication token found in localStorage")
           throw new Error("No authentication token found")
         }
-
-        
 
         const response = await fetch(`${API_BASE_URL}/shop/vendor-product/${slug}`, {
           method: "GET",
@@ -196,6 +193,13 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (product?.items) {
+     
+      setImagesToKeep(product.items.map((item) => item.product_image))
+    }
+  }, [product])
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     console.log(`Input changed: ${name} = ${value}`)
@@ -228,6 +232,23 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
     toast.success("Images will be uploaded when you save the product")
   }
 
+  const handleRemoveExistingImage = (index: number) => {
+    if (product?.items && index < product.items.length) {
+      const imageUrl = product.items[index].product_image
+      setImagesToKeep((prev) => prev.filter((url) => url !== imageUrl))
+
+      
+      if (index === activeImageIndex) {
+        setActiveImageIndex(0)
+      } else if (index < activeImageIndex) {
+       
+        setActiveImageIndex((prev) => prev - 1)
+      }
+
+      toast.success("Image will be removed when you save the product")
+    }
+  }
+
   const handleSaveEdit = async () => {
     console.log("Saving product edits...")
     setIsSaving(true)
@@ -239,28 +260,45 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
         throw new Error("No authentication token found")
       }
 
-      const productData = {
-        product_name: editedProduct.product_name,
-        product_description: editedProduct.product_description,
-        product_tags: editedProduct.product_tags,
-        product_sale_price: editedProduct.product_sale_price,
-        product_regular_price: editedProduct.product_regular_price,
-        product_visibility: editedProduct.product_visibility,
-        product_status: editedProduct.product_status,
-        product_variant: editedProduct.product_variant,
-        product_shop: editedProduct.product_shop,
-        category: editedProduct.category,
+      const formData = new FormData()
+
+      formData.append("product_name", editedProduct.product_name || "")
+      formData.append("product_description", editedProduct.product_description || "")
+      formData.append("product_tags", editedProduct.product_tags || "")
+      formData.append("product_sale_price", editedProduct.product_sale_price || "")
+      formData.append("product_regular_price", editedProduct.product_regular_price || "")
+      formData.append("product_visibility", String(editedProduct.product_visibility || false))
+      formData.append("product_status", String(editedProduct.product_status || false))
+      formData.append("product_variant", editedProduct.product_variant || "")
+      formData.append("category", editedProduct.category || "")
+
+      if (product?.items) {
+        imagesToKeep.forEach((imageUrl) => {
+          formData.append("product_images", imageUrl)
+        })
       }
 
-      console.log("Edited product data:", JSON.stringify(productData, null, 2))
+      if (newImageFiles.length > 0) {
+        newImageFiles.forEach((file) => {
+          formData.append("product_images", file)
+        })
+      }
+
+      console.log(
+        "Sending form data with",
+        imagesToKeep.length,
+        "existing images and",
+        newImageFiles.length,
+        "new images",
+      )
 
       const response = await fetch(`${API_BASE_URL}/shop/vendor-product/${slug}`, {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
+          
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(productData),
+        body: formData,
       })
 
       console.log("Save response status:", response.status)
@@ -273,14 +311,9 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
       const updatedData = await response.json()
       console.log("Updated product data:", JSON.stringify(updatedData, null, 2))
 
-     
-      if (newImageFiles.length > 0) {
-        toast.error("Image uploads are not supported when editing products. Only product details were updated.")
-        setNewImageFiles([])
-      }
-
       setProductResponse(updatedData)
       setIsEditing(false)
+      setNewImageFiles([])
       toast.success("Product updated successfully!")
     } catch (err) {
       console.error("Error saving product:", err)
@@ -385,7 +418,6 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 className="object-contain"
                 onError={(e) => {
                   console.error(`Image load error for: ${mainImageUrl}`)
-                 
                   ;(e.target as HTMLImageElement).src = "/placeholder.svg?height=400&width=400"
                 }}
               />
@@ -437,17 +469,19 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                 {product.items && product.items.length > 0 ? (
                   product.items.map((image, index) => {
                     const thumbnailUrl = fixImageUrl(image.product_image)
-                    console.log(`Thumbnail ${index} URL:`, thumbnailUrl)
+                    const isKept = imagesToKeep.includes(image.product_image)
 
                     return (
                       <div
                         key={index}
                         className={`relative h-20 w-20 flex-shrink-0 cursor-pointer overflow-hidden rounded-md border-2 mx-1 ${
                           index === activeImageIndex ? "border-orange-500" : "border-transparent"
-                        }`}
+                        } ${!isKept ? "opacity-40" : ""}`}
                         onClick={() => {
-                          console.log(`Setting active image index to ${index}`)
-                          setActiveImageIndex(index)
+                          if (isKept) {
+                            console.log(`Setting active image index to ${index}`)
+                            setActiveImageIndex(index)
+                          }
                         }}
                       >
                         <Image
@@ -457,10 +491,27 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                           className="object-cover"
                           onError={(e) => {
                             console.error(`Thumbnail load error for: ${thumbnailUrl}`)
-                           
                             ;(e.target as HTMLImageElement).src = "/placeholder.svg?height=80&width=80"
                           }}
                         />
+                        {isEditing && (
+                          <button
+                            className={`absolute top-0 right-0 bg-red-500 text-white rounded-bl-md p-1 text-xs ${
+                              !isKept ? "bg-green-500" : ""
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (isKept) {
+                                handleRemoveExistingImage(index)
+                              } else {
+                              
+                                setImagesToKeep((prev) => [...prev, image.product_image])
+                              }
+                            }}
+                          >
+                            {isKept ? "×" : "↺"}
+                          </button>
+                        )}
                       </div>
                     )
                   })
@@ -526,8 +577,14 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     </div>
                   ))}
                 </div>
-                <p className="mt-2 text-xs text-gray-500">
-                  Note: Image uploads are not supported when editing products
+                <p className="mt-2 text-xs text-gray-500">Images will be updated when you save the product</p>
+              </div>
+            )}
+
+            {isEditing && product?.items && product.items.length > 0 && imagesToKeep.length < product.items.length && (
+              <div className="mt-4 p-3 bg-red-50 rounded-lg">
+                <p className="text-sm text-red-600">
+                  {product.items.length - imagesToKeep.length} image(s) will be removed when you save
                 </p>
               </div>
             )}
@@ -615,7 +672,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                     <EditOutlined fontSize="small" />
                     <span>Edit</span>
                   </motion.button>
-                  <motion.button
+                  {/* <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center gap-1 rounded-xl bg-red-500 px-4 py-2 text-white"
@@ -624,7 +681,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                   >
                     <DeleteOutlined fontSize="small" />
                     <span>{isDeleting ? "Deleting..." : "Delete"}</span>
-                  </motion.button>
+                  </motion.button> */}
                 </>
               )}
             </div>
@@ -683,7 +740,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                         name="product_status"
                         checked={editedProduct.product_status || false}
                         onChange={handleCheckboxChange}
-                        className="mr-2 h-4 w-4"
+                        className="mr-2 h-4 w-4 accent-orange-500"
                       />
                       <label htmlFor="product_status">In Stock</label>
                     </div>
@@ -763,7 +820,7 @@ export default function ProductDetailsClient({ slug }: { slug: string }) {
                             name="product_visibility"
                             checked={editedProduct.product_visibility || false}
                             onChange={handleCheckboxChange}
-                            className="mr-2 h-4 w-4"
+                            className="mr-2 h-4 w-4 accent-orange-500"
                           />
                           <label htmlFor="product_visibility">Visible</label>
                         </div>

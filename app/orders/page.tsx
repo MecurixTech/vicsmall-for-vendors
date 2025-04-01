@@ -161,7 +161,7 @@ const OrdersPage = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            You haven`&apos;`t received any orders yet. Once customers place orders, they will appear here.
+            You haven&apos;t received any orders yet. Once customers place orders, they will appear here.
           </motion.p>
 
           <motion.div
