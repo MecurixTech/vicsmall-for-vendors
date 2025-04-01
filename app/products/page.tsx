@@ -255,7 +255,7 @@ const Products = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            You haven`&apos;`t added any products to your store yet. Start adding products to showcase them to your customers.
+            You haven&apos;t added any products to your store yet. Start adding products to showcase them to your customers.
           </motion.p>
 
           <motion.div

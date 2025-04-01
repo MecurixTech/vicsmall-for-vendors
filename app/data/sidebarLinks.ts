@@ -5,9 +5,10 @@ import {
   RateReviewOutlined,
   ShoppingBagOutlined,
 } from "@mui/icons-material";
+import BagIcon from "public/bag-2.svg";
 
 export const sidebarLinks = [
-  {
+  { 
     id: 0,
     label: "Dashboard",
     href: "/",
