@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { MiniChart } from "../app/components/dashboard/mini-chart";
 import { CustomBarChart } from "../app/components/dashboard/bar-chart";
+import toast from 'react-hot-toast'
 
 interface DashboardData {
   daily_sales: { day: string; value: number }[];
@@ -17,8 +18,7 @@ interface DashboardData {
 export default function Dashboard() {
   const router = useRouter();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -26,7 +26,10 @@ export default function Dashboard() {
         if (!token) {
           throw new Error("No authentication token found");
         }
-
+  
+       
+        toast.loading("Loading dashboard data...");
+  
         const response = await fetch("https://vicsmall-backend-ckn4.onrender.com/v1/api/dashboard/vendor-dashboard/", {
           method: "GET",
           headers: {
@@ -34,32 +37,40 @@ export default function Dashboard() {
             "Authorization": `Bearer ${token}`,
           },
         });
-
+  
         const data = await response.json();
         console.log("Dashboard Data:", data);
-
+  
         if (!response.ok) {
           throw new Error(data.message || "Failed to fetch dashboard data");
         }
-
+  
         setDashboardData(data.Data);
+  
+        // Dismiss loading toast and show success
+        toast.dismiss();
+        toast.success("Dashboard data loaded successfully!");
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
+  
+       
+        toast.dismiss();
+        toast.error("Failed to load dashboard data.");
       } finally {
-        setLoading(false);
+        console.log('Done')
       }
     };
-
+  
     fetchDashboardData();
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/Sign-in");
     }
   }, [router]);
+  
+  // Remove the `if (loading)` block entirely
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+ 
 
   if (!dashboardData) {
     return (

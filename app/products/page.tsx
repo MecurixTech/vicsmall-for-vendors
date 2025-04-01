@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Filters from "../components/products/filters";
+import toast from 'react-hot-toast'
 
 interface Product {
   id: string;
@@ -31,15 +32,21 @@ const categoryMapping: { [key: string]: string } = {
   "b587c20d-c3f6-4b5d-9d9f-2795f669a01b": "Clothing",
   "b41e74a6-13f5-4277-8474-4a772725a6aa": "Electronics",
   "8284ec4f-7b05-4e16-8eeb-788ed39dcd05": "Beauty",
-  // Add other category mappings here
-};
+  };
 
 const Products = () => {
   const [isInListView, setIsInListView] = useState<boolean>(true);
   const [isShowingFilters, setIsShowingFilters] = useState<boolean>(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+const [isChecked, setisChecked] = useState<{ [key: string]: boolean }>({});
 
+  const toggleSelection = (id: string) => {
+    setisChecked((prev) => ({
+      ...prev,
+      [id]: !prev[id], // 
+    }));
+  };
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -47,6 +54,8 @@ const Products = () => {
         if (!token) {
           throw new Error("No authentication token found");
         }
+
+  toast.loading("Loading Product Data....")
 
         const response = await fetch(
           "https://vicsmall-backend-ckn4.onrender.com/v1/api/shop/vendor-products",
@@ -61,8 +70,12 @@ const Products = () => {
 
         if (response.ok) {
           const data = await response.json();
+          toast.dismiss();
+          toast.success("Product Data Loaded Succesfully")
           setProducts(data.Data || []);
         } else {
+          toast.dismiss();
+        toast.error("Failed to fetch Product data.")
           console.error("Failed to fetch products");
         }
       } catch (error) {
@@ -74,10 +87,10 @@ const Products = () => {
 
     fetchProducts();
   }, []);
+if (loading){
+  console.log("loading")
+}
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -152,6 +165,7 @@ const Products = () => {
               <table className="w-full rounded-xl bg-white text-xs shadow-sm md:text-sm">
                 <thead>
                   <tr>
+                    <th></th>
                     <th>IMAGE</th>
                     <th>PRODUCT NAME</th>
                     <th>PRICE</th>
@@ -160,47 +174,61 @@ const Products = () => {
                     <th>DATE</th>
                   </tr>
                 </thead>
-
                 <tbody>
-                  {products.map((product) => (
-                    <tr key={product.id}>
-                      <td>
-                        <Image
-                          src={product.imgSrc}
-                          alt={product.product_name}
-                          height={48}
-                          width={48}
-                          className="h-12 w-12 rounded-lg object-cover"
-                        />
-                      </td>
-                      <td>
-                        <Link
-                          href={`products/${product.id}`}
-                          className="hover:underline"
-                        >
-                          {product.product_name}
-                        </Link>
-                      </td>
-                      <td>{product.product_sale_price}</td>
-                      <td className="capitalize">{categoryMapping[product.category] || product.category}</td>
-                      <td>
-                        <span
-                          className={`${product.product_status ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"} rounded-lg p-2 text-xs`}
-                        >
-                          {product.product_status
-                            ? "Available"
-                            : "Out of stock"}
-                        </span>
-                      </td>
-                      <td>
-                        {new Date(product.created_at).toLocaleDateString()}
-                      </td>
-                      <td>
-                        <DeleteOutlined />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
+  {products.map((product) => (
+    <tr key={product.id}>
+      <td>
+      <label className="relative flex items-center cursor-pointer">
+  <input
+    type="checkbox"
+    checked={isChecked}
+    onChange={() => setIsChecked((prev) => !prev)} // Allow user interaction
+    className="peer hidden" // Remove `cursor-not-allowed` to make it clickable
+  />
+  <div className="w-5 h-5 border-2 border-[#F5842F] rounded-md transition-all peer-checked:bg-[#F5842F] peer-checked:border-[#F5842F] flex items-center justify-center">
+    <span className="hidden peer-checked:block text-white text-sm font-bold">✔</span>
+  </div>
+</label>
+      </td>
+      <td>
+        <Image
+          src={product.imgSrc}
+          alt={product.product_name}
+          height={48}
+          width={48}
+          className="h-12 w-12 rounded-lg object-cover"
+        />
+      </td>
+      <td>
+        <Link
+          href={`products/${product.id}`}
+          className="hover:underline"
+        >
+          {product.product_name}
+        </Link>
+      </td>
+      <td>{product.product_sale_price}</td>
+      <td className="capitalize">{categoryMapping[product.category] || product.category}</td>
+      <td>
+        <span
+          className={`${
+            product.product_status
+              ? "bg-green-50 text-green-600"
+              : "bg-red-50 text-red-600"
+          } rounded-lg p-2 text-xs`}
+        >
+          {product.product_status ? "Available" : "Out of stock"}
+        </span>
+      </td>
+      <td>
+        {new Date(product.created_at).toLocaleDateString()}
+      </td>
+      <td>
+        <DeleteOutlined />
+      </td>
+    </tr>
+  ))}
+</tbody>
               </table>
             </div>
           ) : (

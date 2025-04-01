@@ -1,178 +1,162 @@
 import {
-  CloseOutlined,
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
+  CloseOutlined
 } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import RangeSlider from "./slider";
 
-const selectedCategories = [
-  { id: 0, value: "lingerie" },
-  { id: 1, value: "accessories" },
-  { id: 2, value: "shoes" },
-  { id: 3, value: "dresses" },
-];
-
-const sizes = [
-  { id: 0, value: "Small (S)", name: "sm" },
-  { id: 1, value: "Medium (M)", name: "md" },
-  { id: 2, value: "Large (L)", name: "lg" },
-  { id: 3, value: "Extralarge (XL)", name: "xl" },
-];
-
-const categories = [
-  { id: 0, value: "lingerie" },
-  { id: 1, value: "accessories" },
-  { id: 2, value: "shoes" },
-  { id: 3, value: "dresses" },
-  { id: 4, value: "tops" },
-  { id: 5, value: "bottoms" },
-];
-
-const brands = [
-  { id: 0, value: "Dior", name: "dior" },
-  { id: 1, value: "Gucci", name: "gucci" },
-  { id: 2, value: "Dolce & Gabbana", name: "dolce_and_gabbana" },
-  { id: 3, value: "Louis Vutton", name: "louis_vutton" },
-];
-
-const colors = [
-  { id: 0, value: "red" },
-  { id: 1, value: "blue" },
-  { id: 2, value: "green" },
-  { id: 3, value: "black" },
-  { id: 4, value: "white" },
-];
-
 const Filters = () => {
-  const [isShowingCategories, setIsShowingCategories] =
-    useState<boolean>(false);
-  const [isShowingSize, setIsShowingSize] = useState<boolean>(false);
-  const [isShowingBrand, setIsShowingBrand] = useState<boolean>(false);
-  const [isShowingColor, setIsShowingColor] = useState<boolean>(false);
+  const router = useRouter();
+
+  const categories = ["Clothing", "Beauty", "Footwear", "Accessories", "Electronics"];
+  const sizes = ["Small (S)", "Medium (M)", "Large (L)", "Extra Large (XL)"];
+  const brands = ["Dior", "Gucci", "Dolce&Gabbana", "Louis Vuitton"];
+  const colors = ["White", "Red", "Black", "Pink"];
+
+  // State for selected filters
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([0, 10000]);
+
+  // Toggle selection for filters
+  const toggleSelection = (list: string[], setList: React.Dispatch<React.SetStateAction<string[]>>, value: string) => {
+    setList((prev) =>
+      prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
+    );
+  };
+  
+
+  // Apply filters and update URL
+  const applyFilters = () => {
+    const query = new URLSearchParams();
+    if (selectedCategories.length) query.set("categories", selectedCategories.join(","));
+    if (selectedSizes.length) query.set("sizes", selectedSizes.join(","));
+    if (selectedBrands.length) query.set("brands", selectedBrands.join(","));
+    if (selectedColors.length) query.set("colors", selectedColors.join(","));
+    query.set("minPrice", priceRange[0].toString());
+    query.set("maxPrice", priceRange[1].toString());
+    router.push(`/products?${query.toString()}`);
+  };
+
   return (
-    <aside className="flex-1 rounded-xl bg-white/70 p-4 text-sm">
-      <p className="mb-2 text-base font-medium text-gray-800">Filters</p>
+    <aside className="w-56 p-4 bg-[#F5842F1A] rounded-xl text-white">
 
-      <div className="mb-4 flex flex-wrap gap-1 text-xs uppercase">
-        {selectedCategories.map((category) => (
-          <div
-            key={category.id}
-            className="flex items-center gap-1 rounded-xl bg-accent-100 px-2 py-1 leading-none text-white"
-          >
-            <span className="text-gray-600">{category.value}</span>
-            <button className="text-accent-900">
-              <CloseOutlined fontSize="inherit" />
-            </button>
-          </div>
-        ))}
-      </div>
+<p className="text-lg font-bold text-black">Filters</p>
 
-      {/* Category */}
-      <button
-        onClick={() => setIsShowingCategories((prev) => !prev)}
-        className="mb-2 flex w-full items-center justify-between text-accent-900"
+{/* Selected Filters Tags */}
+<div className="flex flex-wrap gap-2 mt-2">
+  {[...selectedCategories, ...selectedSizes, ...selectedBrands, ...selectedColors].map((filter) => {
+    // Determine which array the filter belongs to
+    const isCategory = selectedCategories.includes(filter);
+    const isSize = selectedSizes.includes(filter);
+    const isBrand = selectedBrands.includes(filter);
+    const isColor = selectedColors.includes(filter);
+
+    return (
+      <span
+        key={filter}
+        className="bg-[#F5842F4D] px-2 py-1 text-black rounded-full text-xs flex items-center"
       >
-        <span className="font-medium text-gray-800">Category</span>
-        {isShowingCategories ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
-      </button>
-      {isShowingCategories && (
-        <div className="max-h-24 overflow-y-scroll">
-          {categories.map((category) => (
-            <div key={category.id} className="flex items-center gap-1 text-xs">
-              <input
-                type="checkbox"
-                name={category.value}
-                id={category.value}
-              />
-              <label
-                htmlFor={category.value}
-                className="font-normal capitalize"
-              >
-                {category.value}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
+        {filter}
+        <CloseOutlined
+          className="ml-1 cursor-pointer text-white"
+          style={{ fontSize: "14px" }}
+          onClick={() => {
+            if (isCategory) toggleSelection(selectedCategories, setSelectedCategories, filter);
+            if (isSize) toggleSelection(selectedSizes, setSelectedSizes, filter);
+            if (isBrand) toggleSelection(selectedBrands, setSelectedBrands, filter);
+            if (isColor) toggleSelection(selectedColors, setSelectedColors, filter);
+          }}
+        />
+      </span>
+    );
+  })}
+</div>
+
+{/* Category */}
+<p className="mt-4 text-sm text-black font-semibold">Category</p>
+{categories.map((category) => (
+  <div key={category} className="flex items-center gap-2">
+    <input
+      type="checkbox"
+      checked={selectedCategories.includes(category)}
+      onChange={() => toggleSelection(selectedCategories, setSelectedCategories, category)}
+      className="accent-white"
+    />
+    <label className="text-sm">{category}</label>
+  </div>
+))}
+
 
       {/* Price */}
-      <p className="mb-2 mt-4 font-medium text-gray-800">Price</p>
+      <p className="mt-4 text-sm font-semibold text-black">Price</p>
       <RangeSlider priceRange={priceRange} setPriceRange={setPriceRange} />
-      <div className="mb-4 mt-1 flex items-center justify-between text-xs text-gray-500">
-        <span>$0</span>
-        <span>$10000</span>
+      <div className="flex justify-between mt-1 text-sm">
+        <input
+          type="text"
+          value={`₦${priceRange[0]}`}
+          readOnly
+          className="bg-white text-black px-2 py-1 rounded-md w-20 text-center"
+        />
+        <input
+          type="text"
+          value={`₦${priceRange[1]}`}
+          readOnly
+          className="bg-white text-black px-2 py-1 rounded-md w-20 text-center"
+        />
       </div>
 
       {/* Size */}
-      <button
-        onClick={() => setIsShowingSize((prev) => !prev)}
-        className="mb-2 flex w-full items-center justify-between"
-      >
-        <p className="font-medium text-gray-800">Size</p>
-        <div className="text-accent-900">
-          {isShowingSize ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
+      <p className="mt-4 text-sm font-semibold text-black">Size</p>
+      {sizes.map((size) => (
+        <div key={size} className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={selectedSizes.includes(size)}
+            onChange={() => toggleSelection(selectedSizes, setSelectedSizes, size)}
+            className="accent-white"
+          />
+          <label className="text-sm">{size}</label>
         </div>
-      </button>
-      {isShowingSize && (
-        <div>
-          {sizes.map((size) => (
-            <div key={size.id} className="flex items-center gap-1 text-xs">
-              <input type="checkbox" name={size.name} id={size.name} />
-              <label htmlFor={size.name} className="font-normal">
-                {size.value}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
+      ))}
 
       {/* Brand */}
-      <button
-        onClick={() => setIsShowingBrand((prev) => !prev)}
-        className="mb-2 mt-4 flex w-full items-center justify-between"
-      >
-        <p className="font-medium text-gray-800">Brand</p>
-        <div className="text-accent-900">
-          {isShowingBrand ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
+      <p className="mt-4 text-sm font-semibold text-black">Brand</p>
+      {brands.map((brand) => (
+        <div key={brand} className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={selectedBrands.includes(brand)}
+            onChange={() => toggleSelection(selectedBrands, setSelectedBrands, brand)}
+            className="accent-white"
+          />
+          <label className="text-sm">{brand}</label>
         </div>
-      </button>
-      {isShowingBrand && (
-        <div className="max-h-24 overflow-y-scroll">
-          {brands.map((brand) => (
-            <div key={brand.id} className="flex items-center gap-1 text-xs">
-              <input type="checkbox" name={brand.name} id={brand.name} />
-              <label htmlFor={brand.name} className="font-normal">
-                {brand.value}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
+      ))}
 
       {/* Color */}
+      <p className="mt-4 text-sm font-semibold text-black">Color</p>
+      {colors.map((color) => (
+        <div key={color} className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={selectedColors.includes(color)}
+            onChange={() => toggleSelection(selectedColors, setSelectedColors, color)}
+            className="accent-white"
+          />
+          <label className="text-sm">{color}</label>
+        </div>
+      ))}
+
+      {/* Apply Filters Button */}
       <button
-        onClick={() => setIsShowingColor((prev) => !prev)}
-        className="mb-2 mt-4 flex w-full items-center justify-between"
+        onClick={applyFilters}
+        className="mt-4 w-full bg-white text-orange-600 font-semibold py-2 rounded-md"
       >
-        <p className="font-medium text-gray-800">Color</p>
-        <div className="text-accent-900">
-          {isShowingColor ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
-        </div>
+        Apply Filters
       </button>
-      {isShowingColor && (
-        <div>
-          {colors.map((color) => (
-            <div key={color.id} className="flex items-center gap-1 text-xs">
-              <input type="checkbox" name={color.value} id={color.value} />
-              <label htmlFor={color.value} className="font-normal capitalize">
-                {color.value}
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
     </aside>
   );
 };

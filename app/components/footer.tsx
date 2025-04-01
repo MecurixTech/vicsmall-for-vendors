@@ -3,6 +3,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
+    <div className="pt-[100px]">
     <footer className="mt-8 bg-neutral-dark-blue px-8 pb-4 pt-8 text-sm text-neutral-light-gray">
       <div className="flex flex-wrap items-center justify-center gap-8">
         <Image
@@ -28,6 +29,7 @@ const Footer = () => {
       <hr className="my-4 block sm:hidden" />
       <p className="text-center text-gray-500">Vicsmall &copy;2024</p>
     </footer>
+    </div>
   );
 };
 

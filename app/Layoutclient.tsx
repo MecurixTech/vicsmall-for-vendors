@@ -22,7 +22,7 @@ export default function RootLayoutClient({
         <div className={`flex flex-col items-start gap-6 md:flex-row ${isAuthPage ? "justify-center" : ""}`}>
           {!isAuthPage && <Sidebar />}
           {!isAuthPage && <Tabs />}
-          <div className="w-full flex-[11]">{children}</div>
+          <div className="w-full flex-[11] pb-16">{children}</div>
         </div>
       </div>
       {!isAuthPage && <Footer />}
